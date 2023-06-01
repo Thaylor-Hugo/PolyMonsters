@@ -10,17 +10,22 @@ import main.KeyHandler;
 public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
+    boolean sprinting;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         setDefaltValues();
-        getPlayerImage();
+        getPlayerImage(sprinting);
         this.gp = gp;
         this.keyH = keyH;
     }
 
-    public void getPlayerImage() {
+    public void getPlayerImage(boolean sprinting) {
         try {
-            entityImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/player.png"));
+            if (sprinting) {
+                entityImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/movement/sprinting_down.gif"));
+            } else {
+                entityImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/movement/walking_down.gif"));   
+            }
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
@@ -32,26 +37,30 @@ public class Player extends Entity {
         x = 100;
         y = 100;
         speed = 4;
+        sprinting = false;
     }
     
     @Override
     public void update() {
+        int finalSpeed = speed;
+        if (keyH.sprintPressed) {
+            sprinting = true;
+            finalSpeed += 2;
+        }
         if (keyH.downPressed) {
-            y += speed;
-        }
-        if (keyH.leftPressed) {
-            x -= speed;
-        }
-        if (keyH.rightPressed) {
-            x += speed;   
-        }
-        if (keyH.upPressed) {
-            y -= speed;
+            y += finalSpeed;
+        } else if (keyH.leftPressed) {
+            x -= finalSpeed;
+        } else if (keyH.rightPressed) {
+            x += finalSpeed;   
+        } else if (keyH.upPressed) {
+            y -= finalSpeed;
         }
     }
 
     @Override
     public void draw(Graphics2D g2) {
+        getPlayerImage(sprinting);
         g2.drawImage(entityImage, x, y, gp.tileSize, gp.tileSize, null);
     }
     
