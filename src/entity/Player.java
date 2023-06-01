@@ -39,6 +39,18 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage(boolean sprinting, int movementDirection) {
+        String imagePath = getImagePath(sprinting, movementDirection);
+        if (moving) entityImage = new ImageIcon(imagePath).getImage();
+        else
+            try {
+                entityImage = ImageIO.read(new File(imagePath));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+    }
+
+    private String getImagePath(boolean sprinting, int movementDirection) {
         String imagePath;
         switch (movementDirection) {
             case movingDown:
@@ -66,14 +78,7 @@ public class Player extends Entity {
                 else imagePath = walkingDownPath;
                 break;
         }
-        if (moving) entityImage = new ImageIcon(imagePath).getImage();
-        else
-            try {
-                entityImage = ImageIO.read(new File(imagePath));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        return imagePath;
     }
     
     @Override
@@ -95,22 +100,19 @@ public class Player extends Entity {
         } else {
             sprinting = false;
         }
+        moving = true;
         if (keyH.downPressed) {
             y += finalSpeed;
             movementDirection = movingDown;
-            moving = true;
         } else if (keyH.leftPressed) {
             x -= finalSpeed;
             movementDirection = movingLeft;
-            moving = true;
         } else if (keyH.rightPressed) {
             x += finalSpeed;   
             movementDirection = movingRight;
-            moving = true;
         } else if (keyH.upPressed) {
             y -= finalSpeed;
             movementDirection = movingUp;
-            moving = true;
         } else {
             moving = false;
         }
