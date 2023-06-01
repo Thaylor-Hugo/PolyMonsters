@@ -27,9 +27,9 @@ public class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
-    boolean sprinting;
-    boolean moving;
-    int movementDirection;
+    public boolean sprinting;
+    public boolean moving;
+    public int movementDirection;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         setDefaltValues();
@@ -38,7 +38,7 @@ public class Player extends Entity {
         this.keyH = keyH;
     }
 
-    public void getPlayerImage(boolean sprinting, int movementDirection) {
+    private void getPlayerImage(boolean sprinting, int movementDirection) {
         String imagePath = getImagePath(sprinting, movementDirection);
         if (moving) entityImage = new ImageIcon(imagePath).getImage();
         else
