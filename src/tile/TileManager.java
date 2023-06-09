@@ -1,26 +1,35 @@
 package tile;
+
 import main.GamePanel;
 import java.awt.Graphics2D;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 public class TileManager {
 
-    public final int NumTiles = 10; //number of different tile sprites
+    public final int NumTiles = 4; //number of all different tile sprites
 
     GamePanel gp;
     Tile[] tile;
+    int mapTileNum[][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         
         tile = new Tile[NumTiles];
 
+        mapTileNum = new int [gp.maxScreenCol][gp.maxScreenRow]; 
+
         getTileImage();
+        loadMap("/maps/map02.txt");
     }
 
     public void getTileImage(){
 
+        //Needs to be updated with all Tile files
         try{
 
             tile[0] = new Tile();
@@ -40,6 +49,28 @@ public class TileManager {
         }
     }
 
+    public void loadMap (String filePath){
+        try {
+            //Read the .txt
+            InputStream is = getClass().getResourceAsStream(filePath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            for (int row = 0; row < gp.maxScreenRow; row++){
+                String line = br.readLine();
+
+                for (int col = 0; col < gp.maxScreenCol; col++){
+                    String numbers[] = line.split(" ");
+                    int num = Integer.parseInt(numbers[col]); //change String to Integer
+                    mapTileNum[col][row] = num;
+                }
+
+            }
+            br.close();
+
+        }catch (Exception e){
+        }
+    }
+
     public void draw (Graphics2D g2) {
 
         int col = 0;
@@ -47,25 +78,18 @@ public class TileManager {
         int x = 0;
         int y = 0;
 
-        while (col < gp.maxScreenCol && row < gp.maxScreenRow){
+        for (row = 0; row < gp.maxScreenRow; row++){
            
-            g2.drawImage(tile[1].image, x, y, gp.tileSize, gp.tileSize, null);
-            col++;
-            x += gp.tileSize;
+            for (col=0; col < gp.maxScreenCol; col++){
 
-            if (col == gp.maxScreenCol) {
-                col = 0;
-                x = 0;
-                row++;
-                y += gp.tileSize;
+                int tileNum = mapTileNum[col][row];
+
+                g2.drawImage(tile[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
+                x += gp.tileSize;
             }
+            x = 0;
+            y += gp.tileSize;
         }
-
-        g2.drawImage(tile[0].image, 0, 0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[1].image, 48*1, 0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[2].image, 48*2, 0, gp.tileSize, gp.tileSize, null);
-        g2.drawImage(tile[3].image, 48*3, 0, gp.tileSize, gp.tileSize, null);
-
     }
     
 }
