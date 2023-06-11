@@ -25,6 +25,10 @@ public class Player extends Entity {
     private static final int movingRight = 3;
     private static final int movingLeft = 4;
 
+    //player position related to the screen
+    public final int screenX;
+    public final int screenY;
+
     GamePanel gp;
     KeyHandler keyH;
     public boolean sprinting;
@@ -32,10 +36,15 @@ public class Player extends Entity {
     public int movementDirection;
 
     public Player(GamePanel gp, KeyHandler keyH) {
-        setDefaltValues();
-        getPlayerImage(sprinting, movementDirection);
         this.gp = gp;
         this.keyH = keyH;
+
+        //player's position fixed in the center of screen
+        screenX = gp.screenWidth/2 - gp.tileSize/2;
+        screenY = gp.screenHeight/2 - gp.tileSize/2;
+
+        setDefaltValues();
+        getPlayerImage(sprinting, movementDirection);
     }
 
     private void getPlayerImage(boolean sprinting, int movementDirection) {
@@ -83,8 +92,8 @@ public class Player extends Entity {
     
     @Override
     void setDefaltValues() {
-        mapX = 100;
-        mapY = 100;
+        mapX = gp.tileSize*8;     //position related to the world map
+        mapY = gp.tileSize*6;
         speed = 2;
         sprinting = false;
         moving = false;
@@ -121,7 +130,7 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D g2) {
         getPlayerImage(sprinting, movementDirection);
-        g2.drawImage(entityImage, mapX, mapY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
     
 }
