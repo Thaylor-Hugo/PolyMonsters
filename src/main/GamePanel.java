@@ -15,7 +15,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MENU = 0;
     final int PLAYING = 1;
 
-    final int originalTileSize = 16;
+    final int originalTileSize = 16;    //TileSize in bits
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
@@ -23,6 +23,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
+
+    // Map settings:
+    public final int maxMapCol = 50;    
+    public final int maxMapRow = 50;
+    public final int mapWidth = tileSize*maxMapCol;
+    public final int mapHeight = tileSize*maxMapRow;
 
     int FPS = 60;
 
@@ -109,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable {
             tileM.draw(g2); //needs to be called first to no overlay Player
             player.draw(g2);
         }
-        
+
         g2.dispose();
     }
 }
