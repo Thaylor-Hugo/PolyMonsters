@@ -11,18 +11,33 @@ import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
     
+    final int MENU = 0;
+    final int PLAYING = 1;
+
     final int originalTileSize = 16;
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
     final int maxScreenCol = 16;
     final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
 
     int FPS = 60;
 
+    int gameState = MENU;
+
+    public void setGameState() {
+        if (gameState == MENU) {
+            gameState = PLAYING;
+        } else {
+            gameState = MENU;
+        };
+    }
+
     KeyHandler keyH = new KeyHandler();
+
+    Menu menu = new Menu(this, keyH);
 
     Thread gameThread;
     
@@ -69,7 +84,15 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         // Update the information on screen, as such player position
-        player.update();
+        if (gameState == MENU) {
+            menu.tick();
+        } else {
+            if (keyH.pausePressed) {
+                gameState = MENU;
+            } else {
+                player.update();        
+            }
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -78,7 +101,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
         
-        player.draw(g2);
+        if (gameState == MENU) {
+            menu.render(g);
+        } else {
+            player.draw(g2);
+        }
 
         g2.dispose();
     }
