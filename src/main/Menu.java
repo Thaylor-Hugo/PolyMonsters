@@ -1,6 +1,13 @@
+package main;
+
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Menu {
 	
@@ -10,34 +17,42 @@ public String[] options = {"jogar","carregar jogo","sair"};
 	
 	public int maxOption = options.length - 1;
 	
-	public boolean up,down,ok;
-	
 	public BufferedImage player;
-	
-	public Menu() {
-		player = Game.spritesheet.getSprite(48, 0, 16, 16);
+
+	GamePanel gp;
+	KeyHandler keyH;
+
+	public Menu(GamePanel gp, KeyHandler keyH) {
+		try {
+			player = ImageIO.read(new File("resources/player/movement/walking_down.gif"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.gp = gp;
+		this.keyH = keyH;
 	}
 	
 	public void tick() {
 		System.out.println(""+currentOption);
 		
-		if(down) {
+		if(keyH.downPressed) {
 			currentOption++;
-			down = false;
+			keyH.downPressed = false;
 			if(currentOption > maxOption)
 				currentOption = 0;
 		}
 		
-		if(up) {
+		if(keyH.upPressed) {
 			currentOption--;
-			up = false;
+			keyH.upPressed = false;
 			if(currentOption < 0)
 				currentOption = maxOption;
 		}
-		if(ok) {
-			ok = false;
+		if(keyH.interrectPressed) {
+			keyH.interrectPressed = false;
 			if(currentOption == 0) {
-				//inicia o jogo
+				gp.setGameState();
 			}
 			if(currentOption == 1) {
 				//carrega o jogo
@@ -49,13 +64,15 @@ public String[] options = {"jogar","carregar jogo","sair"};
 	}
 	public void render(Graphics g) {
 		g.setColor(new Color(60, 0, 0));
-		g.fillRect(0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE);
+		g.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 		g.setColor(new Color(0,0,0));
-		g.drawString("Jogar", (Game.WIDTH/2) - 20, 80);
-		g.drawString("Carregar", (Game.WIDTH/2) - 33, 100);
-		g.drawString("Sair", (Game.WIDTH/2) - 14, 120);
-		if(currentOption == 0)g.drawImage(player,(Game.WIDTH/2) - 40, 64,null);
-		if(currentOption == 1)g.drawImage(player, (Game.WIDTH/2) - 53, 84,null);
-		if(currentOption == 2)g.drawImage(player,  (Game.WIDTH/2) - 34, 104,null);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 48));
+		g.drawString("PolyMonsters", (gp.screenWidth/2) - 100, 100);
+		g.drawString("Jogar", (gp.screenWidth/2) - 50, 400);
+		g.drawString("Carregar", (gp.screenWidth/2) - 75, 448);
+		g.drawString("Sair", (gp.screenWidth/2) - 40, 496);
+		if(currentOption == 0)g.drawImage(player, (gp.screenWidth/2) - 138, 360, 48, 48, null);
+		if(currentOption == 1)g.drawImage(player, (gp.screenWidth/2) - 163, 408, 48, 48, null);
+		if(currentOption == 2)g.drawImage(player, (gp.screenWidth/2) - 128, 456, 48, 48, null);
 	}
 }
