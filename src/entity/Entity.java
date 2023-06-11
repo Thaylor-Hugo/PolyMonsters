@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 public abstract class Entity {
-    public int x;
-    public int y;
+    public int mapX;    //position related to the world map
+    public int mapY;
     public int speed;
     public Image entityImage;
 
