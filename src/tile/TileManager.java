@@ -80,7 +80,7 @@ public class TileManager {
 
         for (row = 0; row < gp.maxMapRow; row++){
            
-            for (col=0; col < gp.maxMapRow; col++){
+            for (col=0; col < gp.maxMapCol; col++){
 
                 int tileNum = mapTileNum[col][row];
 
