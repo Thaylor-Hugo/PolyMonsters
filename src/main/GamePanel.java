@@ -12,7 +12,7 @@ import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
     
-    final int originalTileSize = 16;
+    final int originalTileSize = 16;    //TileSize in bits
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
@@ -20,6 +20,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
+
+    // Map settings:
+    public final int maxMapCol = 50;    
+    public final int maxMapRow = 50;
+    public final int mapWidth = tileSize*maxMapCol;
+    public final int mapHeight = tileSize*maxMapRow;
 
     int FPS = 60;
 

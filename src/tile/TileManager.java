@@ -21,10 +21,10 @@ public class TileManager {
         
         tile = new Tile[NumTiles];
 
-        mapTileNum = new int [gp.maxScreenCol][gp.maxScreenRow]; 
+        mapTileNum = new int [gp.maxMapCol][gp.maxMapRow]; 
 
         getTileImage();
-        loadMap("/maps/map02.txt");
+        loadMap("/maps/map03.txt");
     }
 
     public void getTileImage(){
@@ -51,14 +51,14 @@ public class TileManager {
 
     public void loadMap (String filePath){
         try {
-            //Read the .txt
+            //Reads the mapXX.txt
             InputStream is = getClass().getResourceAsStream(filePath);
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-            for (int row = 0; row < gp.maxScreenRow; row++){
+            for (int row = 0; row < gp.maxMapRow; row++){
                 String line = br.readLine();
 
-                for (int col = 0; col < gp.maxScreenCol; col++){
+                for (int col = 0; col < gp.maxMapCol; col++){
                     String numbers[] = line.split(" ");
                     int num = Integer.parseInt(numbers[col]); //change String to Integer
                     mapTileNum[col][row] = num;
@@ -78,9 +78,9 @@ public class TileManager {
         int x = 0;
         int y = 0;
 
-        for (row = 0; row < gp.maxScreenRow; row++){
+        for (row = 0; row < gp.maxMapRow; row++){
            
-            for (col=0; col < gp.maxScreenCol; col++){
+            for (col=0; col < gp.maxMapRow; col++){
 
                 int tileNum = mapTileNum[col][row];
 
