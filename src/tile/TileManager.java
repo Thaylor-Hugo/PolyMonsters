@@ -82,15 +82,15 @@ public class TileManager {
 
                 int tileNum = mapTileNum[mapCol][mapRow];
 
-                //tile position relative to world map
+                //Tile's position relative to world map
                 int mapX = mapCol * gp.tileSize;
                 int mapY = mapRow * gp.tileSize;
 
-                //tile position relative to screen
+                //Tile's position relative to screen
                 int screenX = mapX - gp.getPlayer().mapX + gp.getPlayer().screenX;
                 int screenY = mapY - gp.getPlayer().mapY + gp.getPlayer().screenY;
 
-                //Makes method only draws Tiles visible in screen
+                //Makes method only draw Tiles visible in the screen
                 if (mapX + gp.tileSize > gp.getPlayer().mapX - gp.getPlayer().screenX &&
                     mapX - gp.tileSize < gp.getPlayer().mapX + gp.getPlayer().screenX &&
                     mapY + gp.tileSize > gp.getPlayer().mapY - gp.getPlayer().screenY &&
