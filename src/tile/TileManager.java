@@ -73,22 +73,25 @@ public class TileManager {
 
     public void draw (Graphics2D g2) {
 
-        int col = 0;
-        int row = 0;
-        int x = 0;
-        int y = 0;
+        int mapCol = 0;
+        int mapRow = 0;
 
-        for (row = 0; row < gp.maxMapRow; row++){
+        for (mapRow = 0; mapRow < gp.maxMapRow; mapRow++){
            
-            for (col=0; col < gp.maxMapCol; col++){
+            for (mapCol=0; mapCol < gp.maxMapCol; mapCol++){
 
-                int tileNum = mapTileNum[col][row];
+                int tileNum = mapTileNum[mapCol][mapRow];
 
-                g2.drawImage(tile[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
-                x += gp.tileSize;
+                //tile position relative to world map
+                int mapX = mapCol * gp.tileSize;
+                int mapY = mapRow * gp.tileSize;
+
+                //tile position relative to screen
+                int screenX = mapX - gp.getPlayer().mapX + gp.getPlayer().screenX;
+                int screenY = mapY - gp.getPlayer().mapY + gp.getPlayer().screenY;
+
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
             }
-            x = 0;
-            y += gp.tileSize;
         }
     }
     
