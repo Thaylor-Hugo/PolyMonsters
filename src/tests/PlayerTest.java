@@ -27,8 +27,8 @@ public class PlayerTest {
     @Test
     @DisplayName("Test default values")
     void setDefaltValuesTest() {
-        assertEquals(playerDefaultX, player.x);
-        assertEquals(playerDefaultY, player.y);
+        assertEquals(playerDefaultX, player.mapX);
+        assertEquals(playerDefaultY, player.mapY);
         assertEquals(playerDefaultSpeed, player.speed);
         assertEquals(playerDefaultSprinting, player.sprinting);
         assertEquals(playerDefaultMoving, player.moving);
@@ -48,8 +48,8 @@ public class PlayerTest {
         "false, false, false, true, true"
     })
     void updateTest(boolean up, boolean down, boolean left, boolean right, boolean sprint) {
-        int previusX = player.x;
-        int previusY = player.y;
+        int previusX = player.mapX;
+        int previusY = player.mapY;
         keyH.upPressed = up;
         keyH.downPressed = down;
         keyH.leftPressed = left;
@@ -58,30 +58,30 @@ public class PlayerTest {
         player.update();
         if (keyH.upPressed) {
             if (sprint) {
-                assertTrue(player.y < previusY - player.speed);
+                assertTrue(player.mapY < previusY - player.speed);
             } else {
-                assertTrue(player.y == previusY - player.speed);
+                assertTrue(player.mapY == previusY - player.speed);
             }
         }
         if (keyH.leftPressed) {
             if (sprint) {
-                assertTrue(player.x < previusX - player.speed);
+                assertTrue(player.mapX < previusX - player.speed);
             } else {
-                assertTrue(player.x == previusX - player.speed);
+                assertTrue(player.mapX == previusX - player.speed);
             }
         }
         if (keyH.downPressed) {
             if (sprint) {
-                assertTrue(player.y > previusY + player.speed);
+                assertTrue(player.mapY > previusY + player.speed);
             } else {
-                assertTrue(player.y == previusY + player.speed);
+                assertTrue(player.mapY == previusY + player.speed);
             }
         }
         if (keyH.rightPressed) {
             if (sprint) {
-                assertTrue(player.x > previusX + player.speed);
+                assertTrue(player.mapX > previusX + player.speed);
             } else {
-                assertTrue(player.x == previusX + player.speed);
+                assertTrue(player.mapX == previusX + player.speed);
             }
         }
     }

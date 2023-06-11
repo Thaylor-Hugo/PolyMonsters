@@ -83,8 +83,8 @@ public class Player extends Entity {
     
     @Override
     void setDefaltValues() {
-        x = 100;
-        y = 100;
+        mapX = 100;
+        mapY = 100;
         speed = 2;
         sprinting = false;
         moving = false;
@@ -102,16 +102,16 @@ public class Player extends Entity {
         }
         moving = true;
         if (keyH.downPressed) {
-            y += finalSpeed;
+            mapY += finalSpeed;
             movementDirection = movingDown;
         } else if (keyH.leftPressed) {
-            x -= finalSpeed;
+            mapX -= finalSpeed;
             movementDirection = movingLeft;
         } else if (keyH.rightPressed) {
-            x += finalSpeed;   
+            mapX += finalSpeed;   
             movementDirection = movingRight;
         } else if (keyH.upPressed) {
-            y -= finalSpeed;
+            mapY -= finalSpeed;
             movementDirection = movingUp;
         } else {
             moving = false;
@@ -121,7 +121,7 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D g2) {
         getPlayerImage(sprinting, movementDirection);
-        g2.drawImage(entityImage, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(entityImage, mapX, mapY, gp.tileSize, gp.tileSize, null);
     }
     
 }
