@@ -93,4 +93,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         g2.dispose();
     }
+    
+    public Player getPlayer() {
+        return player;
+    }
 }
