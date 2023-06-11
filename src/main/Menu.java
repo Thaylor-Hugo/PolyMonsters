@@ -34,8 +34,6 @@ public String[] options = {"jogar","carregar jogo","sair"};
 	}
 	
 	public void tick() {
-		System.out.println(""+currentOption);
-		
 		if(keyH.downPressed) {
 			currentOption++;
 			keyH.downPressed = false;

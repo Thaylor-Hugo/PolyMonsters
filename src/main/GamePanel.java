@@ -87,7 +87,11 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == MENU) {
             menu.tick();
         } else {
-            player.update();        
+            if (keyH.pausePressed) {
+                gameState = MENU;
+            } else {
+                player.update();        
+            }
         }
     }
 
