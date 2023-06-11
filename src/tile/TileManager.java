@@ -90,7 +90,14 @@ public class TileManager {
                 int screenX = mapX - gp.getPlayer().mapX + gp.getPlayer().screenX;
                 int screenY = mapY - gp.getPlayer().mapY + gp.getPlayer().screenY;
 
-                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                //Makes method only draws Tiles visible in screen
+                if (mapX + gp.tileSize > gp.getPlayer().mapX - gp.getPlayer().screenX &&
+                    mapX - gp.tileSize < gp.getPlayer().mapX + gp.getPlayer().screenX &&
+                    mapY + gp.tileSize > gp.getPlayer().mapY - gp.getPlayer().screenY &&
+                    mapY - gp.tileSize < gp.getPlayer().mapY + gp.getPlayer().screenY )
+                    {
+                    g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                }
             }
         }
     }
