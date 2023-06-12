@@ -24,4 +24,11 @@ Nosso time é composto por 4 integrantes (gitlab user; Nusp):
 4. Thaylor Hugo Araujo da Silva (@Thaylor-Hugo; 13684425)
 
 ## 📌 Project status
-Desenvolvimento em fase inicial. Finalização do planejamento e ideias para o projeto
+Projeto em desenvolvimento.
+
+### ✅ Objetivos alcançados:
+* Menu inicial e pause
+* Jogador pode se movimentar e correr pelo mapa
+### 🔲 Próximos objetivos:
+* Adicionar monstros e itens pelo mapa
+* Adicionar interação do personagem com o mundo
