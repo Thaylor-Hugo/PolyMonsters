@@ -24,11 +24,16 @@ Nosso time é composto por 4 integrantes (gitlab user; Nusp):
 4. Thaylor Hugo Araujo da Silva (@Thaylor-Hugo; 13684425)
 
 ## 📌 Project status
-Projeto em desenvolvimento.
 
+### 🌎 Fase 2 do projeto:
 ### ✅ Objetivos alcançados:
-* Menu inicial e pause
-* Jogador pode se movimentar e correr pelo mapa
+* Gameloop
+* Menu inicial e sistema de Pause
+* Jogador pode se movimentar (com WASD ou Setinhas) e correr pelo mapa (com SHIFT)
+* Mapa de mundo implementado
+* Movimentação de camera, seguindo o jogador
 ### 🔲 Próximos objetivos:
+* Aprimorar funções já implementadas
+* Aprimorar visualmente os Sprites
 * Adicionar monstros e itens pelo mapa
-* Adicionar interação do personagem com o mundo
+* Adicionar interação do personagem com o mundo (terreno, objetos, NPC's)
