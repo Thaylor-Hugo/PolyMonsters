@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 public class TileManager {
 
-    public final int NumTiles = 4; //number of all different tile sprites
+    public final int NumTiles = 20; //number of all different tile sprites
 
     GamePanel gp;
     Tile[] tile;
@@ -24,7 +24,7 @@ public class TileManager {
         mapTileNum = new int [gp.maxMapCol][gp.maxMapRow]; 
 
         getTileImage();
-        loadMap("/maps/map03.txt");
+        loadMap("/maps/map04.txt");
     }
 
     public void getTileImage(){
@@ -43,6 +43,47 @@ public class TileManager {
             
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+            
+            tile[4] = new Tile();
+            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
+            
+            tile[5] = new Tile();
+            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/street.png"));
+            
+            tile[6] = new Tile();
+            tile[6].image = ImageIO.read(getClass().getResourceAsStream("/tiles/yellow_street_vertical.png"));
+            
+            tile[7] = new Tile();
+            tile[7].image = ImageIO.read(getClass().getResourceAsStream("/tiles/yellow_street_horizontal.png"));
+            
+            tile[8] = new Tile();
+            tile[8].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_1.png"));
+            
+            tile[9] = new Tile();
+            tile[9].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_2.png"));
+            
+            tile[10] = new Tile();
+            tile[10].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_3.png"));
+            
+            tile[11] = new Tile();
+            tile[11].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_4.png"));
+            
+            tile[12] = new Tile();
+            tile[12].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_5.png"));
+            
+            tile[13] = new Tile();
+            tile[13].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_6.png"));
+            
+            tile[14] = new Tile();
+            tile[14].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_7.png"));
+            
+            tile[15] = new Tile();
+            tile[15].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_8.png"));
+            
+            tile[16] = new Tile();
+            tile[16].image = ImageIO.read(getClass().getResourceAsStream("/tiles/roof_9.png"));
+            
+            
 
         } catch (IOException e){
             e.printStackTrace ();
