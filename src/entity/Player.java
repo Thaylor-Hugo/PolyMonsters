@@ -92,8 +92,8 @@ public class Player extends Entity {
     
     @Override
     void setDefaltValues() {
-        mapX = gp.tileSize*8;     //position related to the world map
-        mapY = gp.tileSize*6;
+        mapX = gp.tileSize*36;     //position related to the world map
+        mapY = gp.tileSize*84/2;
         speed = 2;
         sprinting = false;
         moving = false;
