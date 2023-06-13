@@ -24,7 +24,7 @@ public class TileManager {
         mapTileNum = new int [gp.maxMapCol][gp.maxMapRow]; 
 
         getTileImage();
-        loadMap("/maps/map05.txt");
+        loadMap("/maps/map06.txt");
     }
 
     public void getTileImage(){
