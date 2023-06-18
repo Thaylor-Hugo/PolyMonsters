@@ -1,12 +1,6 @@
 package entity;
 
 import java.awt.Graphics2D;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -29,10 +23,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
-    GamePanel gp;
     KeyHandler keyH;
     public boolean sprinting;
-    public boolean moving;
     public int movementDirection;
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -44,54 +36,10 @@ public class Player extends Entity {
         screenY = gp.screenHeight/2 - gp.tileSize/2;
 
         setDefaltValues();
-        getPlayerImage(sprinting, movementDirection);
-    }
-
-    private void getPlayerImage(boolean sprinting, int movementDirection) {
-        String imagePath = getImagePath(sprinting, movementDirection);
-        if (moving) entityImage = new ImageIcon(imagePath).getImage();
-        else
-            try {
-                entityImage = ImageIO.read(new File(imagePath));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-    }
-
-    private String getImagePath(boolean sprinting, int movementDirection) {
-        String imagePath;
-        switch (movementDirection) {
-            case movingDown:
-                if (sprinting) imagePath = sprintingDownPath;
-                else imagePath = walkingDownPath;   
-                break;
-
-            case movingLeft:
-                if (sprinting) imagePath = sprintingLeftPath;
-                else imagePath = walkingLeftPath;
-                break;
-
-            case movingRight:
-                if (sprinting) imagePath = sprintingRightPath;
-                else imagePath = walkingRightPath;
-                break;
-
-            case movingUp:
-                if (sprinting) imagePath = sprintingUpPath; 
-                else imagePath = walkingUpPath; 
-                break;
-
-            default:
-                if (sprinting) imagePath = sprintingDownPath;
-                else imagePath = walkingDownPath;
-                break;
-        }
-        return imagePath;
     }
     
     @Override
-    void setDefaltValues() {
+    protected void setDefaltValues() {
         mapX = gp.tileSize*36;     //position related to the world map
         mapY = gp.tileSize*84/2;
         speed = 2;
@@ -129,8 +77,39 @@ public class Player extends Entity {
 
     @Override
     public void draw(Graphics2D g2) {
-        getPlayerImage(sprinting, movementDirection);
+        entityImage = getEntityImage();
         g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
-    
+
+    @Override
+    protected String getEntityImagePath() {
+        String imagePath;
+        switch (movementDirection) {
+            case movingDown:
+                if (sprinting) imagePath = sprintingDownPath;
+                else imagePath = walkingDownPath;   
+                break;
+
+            case movingLeft:
+                if (sprinting) imagePath = sprintingLeftPath;
+                else imagePath = walkingLeftPath;
+                break;
+
+            case movingRight:
+                if (sprinting) imagePath = sprintingRightPath;
+                else imagePath = walkingRightPath;
+                break;
+
+            case movingUp:
+                if (sprinting) imagePath = sprintingUpPath; 
+                else imagePath = walkingUpPath; 
+                break;
+
+            default:
+                if (sprinting) imagePath = sprintingDownPath;
+                else imagePath = walkingDownPath;
+                break;
+        }
+        return imagePath;
+    }
 }
