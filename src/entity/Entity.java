@@ -15,7 +15,7 @@ public abstract class Entity {
     public int speed;
     public boolean moving;
     public Image entityImage;
-    GamePanel gp;
+    protected GamePanel gp;
 
     abstract protected void setDefaltValues();
     abstract public void update();
@@ -34,7 +34,9 @@ public abstract class Entity {
     }
 
     public void draw(Graphics2D g2) {
-        getEntityImage();
-        g2.drawImage(entityImage, mapX, mapY, gp.tileSize, gp.tileSize, null);
+        int screenX = mapX - gp.getPlayer().mapX + gp.getPlayer().screenX;
+        int screenY = mapY - gp.getPlayer().mapY + gp.getPlayer().screenY;
+        entityImage = getEntityImage();
+        g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }

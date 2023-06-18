@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import entity.monsters.Ghost;
+import entity.monsters.Rat;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -50,6 +52,8 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     
     Player player = new Player(this, keyH);
+    Ghost ghost = new Ghost(this, player);
+    Rat rat = new Rat(this, player);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -99,6 +103,8 @@ public class GamePanel extends JPanel implements Runnable {
                 gameState = MENU;
             } else {
                 player.update();        
+                ghost.update();
+                rat.update();
             }
         }
     }
@@ -114,6 +120,8 @@ public class GamePanel extends JPanel implements Runnable {
         } else {
             tileM.draw(g2); //needs to be called first to no overlay Player
             player.draw(g2);
+            ghost.draw(g2);
+            rat.draw(g2);
         }
 
         g2.dispose();
