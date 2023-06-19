@@ -1,6 +1,7 @@
 // TODO: battleState (improve update() and draw())
 package actions;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -18,7 +19,11 @@ public class Battle {
     GamePanel gp;
     Monsters battleMonster;
     KeyHandler keyH;
-    
+
+    private String[] options = {"Ataque", "Ataque Carregado", "Usar item", "Fugir"};
+    private int currentOption = 0;
+    private int maxOption = options.length - 1;
+
     public Battle(ArrayList<Monsters> monsters, Player player, GamePanel gp, KeyHandler keyH) {
         this.monsters = monsters;
         this.player = player;
@@ -50,21 +55,118 @@ public class Battle {
     }
 
     public void draw(Graphics2D g2) {
-        g2.setColor(new Color(60, 0, 0));
+        // Background Color
+        g2.setColor(new Color(31, 38, 8));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
-		g2.setColor(new Color(0,0,0));
+		
+        // Content
+        drawBattleDisplay(g2);
+        drawOptions(g2);
+    }
+
+    private void drawBattleDisplay(Graphics2D g2) {
+        // Display window with the battle view
+        g2.setColor(new Color(207,229,228));
+        g2.fillRect(gp.tileSize, gp.tileSize, gp.screenWidth - 2*gp.tileSize, gp.screenHeight/2);
+        
+        // Title
+        g2.setColor(Color.BLACK);
 		g2.setFont(new Font("TimesRoman", Font.PLAIN, 48));
-		g2.drawString("In battle with monster", (gp.screenWidth/2) - 100, 100);
-		g2.drawString("Win Battle", (gp.screenWidth/2) - 50, 400);
-		g2.drawImage(battleMonster.entityImage, (gp.screenWidth/2) - 138, 360, 48, 48, null);
+		g2.drawString("Batalha", gp.tileSize, gp.tileSize + 48);
+
+        // Borda
+        g2.setStroke(new BasicStroke(10));
+        g2.drawRect(gp.tileSize-5, gp.tileSize-5, gp.screenWidth - 2*gp.tileSize + 10, gp.screenHeight/2 + 10);
+    
+        // Cenario
+        g2.drawImage(player.entityImage, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, gp.tileSize * 3, null);
+        g2.drawImage(battleMonster.entityImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
+    }
+
+    private void drawOptions(Graphics2D g2) {
+        // Draw the player options in a battle
+
+        g2.setColor(new Color(75, 17, 17));
+        g2.fillRect(gp.tileSize*1, gp.screenHeight - gp.tileSize*4, gp.tileSize*6, gp.tileSize);
+        g2.fillRect(gp.tileSize*9, gp.screenHeight - gp.tileSize*4, gp.tileSize*6, gp.tileSize);
+        g2.fillRect(gp.tileSize*1, gp.screenHeight - gp.tileSize*2, gp.tileSize*6, gp.tileSize);
+        g2.fillRect(gp.tileSize*9, gp.screenHeight - gp.tileSize*2, gp.tileSize*6, gp.tileSize);
+        
+        // Diferent color for current option
+        g2.setColor(new Color(192, 182, 47));
+        if (currentOption == 0) g2.fillRect(gp.tileSize*1, gp.screenHeight - gp.tileSize*4, gp.tileSize*6, gp.tileSize);
+        if (currentOption == 1) g2.fillRect(gp.tileSize*9, gp.screenHeight - gp.tileSize*4, gp.tileSize*6, gp.tileSize);
+        if (currentOption == 2) g2.fillRect(gp.tileSize*1, gp.screenHeight - gp.tileSize*2, gp.tileSize*6, gp.tileSize);
+        if (currentOption == 3) g2.fillRect(gp.tileSize*9, gp.screenHeight - gp.tileSize*2, gp.tileSize*6, gp.tileSize);
+
+        // Options texts
+        g2.setColor(Color.WHITE);
+		g2.setFont(new Font("TimesRoman", Font.PLAIN, 24));
+        g2.drawString(options[0], gp.tileSize*3, gp.screenHeight - gp.tileSize*4 + gp.tileSize*2/3);
+		g2.drawString(options[1], gp.tileSize*10, gp.screenHeight - gp.tileSize*4 + gp.tileSize*2/3);
+		g2.drawString(options[2], gp.tileSize*3, gp.screenHeight - gp.tileSize*2 + gp.tileSize*2/3);
+		g2.drawString(options[3], gp.tileSize*11 + gp.tileSize/2, gp.screenHeight - gp.tileSize*2 + gp.tileSize*2/3);
+
+        // Bordas
+        g2.setStroke(new BasicStroke(10));
+        g2.setColor(Color.BLACK);
+        g2.drawRect(gp.tileSize*1 - 5, gp.screenHeight - gp.tileSize*4 - 5, gp.tileSize*6 + 10, gp.tileSize + 10);
+        g2.drawRect(gp.tileSize*9 - 5, gp.screenHeight - gp.tileSize*4 - 5, gp.tileSize*6 + 10, gp.tileSize + 10);
+        g2.drawRect(gp.tileSize*1 - 5, gp.screenHeight - gp.tileSize*2 - 5, gp.tileSize*6 + 10, gp.tileSize + 10);
+        g2.drawRect(gp.tileSize*9 - 5, gp.screenHeight - gp.tileSize*2 - 5, gp.tileSize*6 + 10, gp.tileSize + 10);
+ 
     }
 
     public void update() {
         if (!inBattle) inBattle();
-        if (inBattle)
+        if (inBattle) {
+            if(keyH.downPressed) {
+			    currentOption += 2;
+    			keyH.downPressed = false;
+			    if(currentOption > maxOption) currentOption -= options.length;
+		    }
+            if(keyH.upPressed) {
+			    currentOption -= 2;
+    			keyH.upPressed = false;
+			    if(currentOption < 0) currentOption += options.length;
+		    }
+            if(keyH.rightPressed) {
+			    currentOption += 1;
+    			keyH.rightPressed = false;
+			    if(currentOption > maxOption) currentOption -= options.length;
+		    }
+            if(keyH.leftPressed) {
+			    currentOption -= 1;
+    			keyH.leftPressed = false;
+			    if(currentOption < 0) currentOption += options.length;
+		    }
             if(keyH.interrectPressed) {
-                inBattle = false;
-                monsters.remove(battleMonster);
+                // TODO: Improve how the battle works
+                if (currentOption == 0) {
+                    // Normal atack
+                    inBattle = false;
+                    monsters.remove(battleMonster);
+                }
+                if (currentOption == 1) {
+                    // Charged atack
+                    inBattle = false;
+                    monsters.remove(battleMonster);
+                }
+                if (currentOption == 2) {
+                    // Itens
+                    
+                }
+                if (currentOption == 3) {
+                    // Run away
+                    if (player.speed > battleMonster.speed) {
+                        // Player is able to run away
+                        player.setOnLastSafePosition();
+                        inBattle = false;
+                    } else {
+                        // Couldn't run
+                    }
+                }
             }
+        }
     }
 }

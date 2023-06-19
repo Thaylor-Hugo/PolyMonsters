@@ -27,6 +27,12 @@ public class Player extends Entity {
     public boolean sprinting;
     public int movementDirection;
 
+    private final int safeDistance;
+    private int walkedX;
+    private int walkedY;
+    private int lastSafeX;
+    private int lastSafeY;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -36,6 +42,7 @@ public class Player extends Entity {
         screenY = gp.screenHeight/2 - gp.tileSize/2;
 
         setDefaltValues();
+        safeDistance = gp.tileSize * 5;
     }
     
     @Override
@@ -46,6 +53,10 @@ public class Player extends Entity {
         sprinting = false;
         moving = false;
         movementDirection = movingDown;
+        lastSafeX = mapX;
+        lastSafeY = mapY;
+        walkedX = 0;
+        walkedY = 0;
     }
     
     @Override
@@ -61,17 +72,29 @@ public class Player extends Entity {
         if (keyH.downPressed) {
             mapY += finalSpeed;
             movementDirection = movingDown;
+            walkedY += finalSpeed;
         } else if (keyH.leftPressed) {
             mapX -= finalSpeed;
             movementDirection = movingLeft;
+            walkedX += finalSpeed;
         } else if (keyH.rightPressed) {
             mapX += finalSpeed;   
             movementDirection = movingRight;
+            walkedX += finalSpeed;
         } else if (keyH.upPressed) {
             mapY -= finalSpeed;
             movementDirection = movingUp;
+            walkedY += finalSpeed;
         } else {
             moving = false;
+        }
+        if (walkedX >= safeDistance) {
+            walkedX = 0;
+            lastSafeX = mapX;
+        }
+        if (walkedY >= safeDistance) {
+            walkedY = 0;
+            lastSafeY = mapY;
         }
     }
 
@@ -111,5 +134,10 @@ public class Player extends Entity {
                 break;
         }
         return imagePath;
+    }
+
+    public void setOnLastSafePosition() {
+        mapX = lastSafeX;
+        mapY = lastSafeY;
     }
 }
