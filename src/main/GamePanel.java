@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import actions.Battle;
 import entity.Player;
 import entity.monsters.Ghost;
+import entity.monsters.Monsters;
 import entity.monsters.Rat;
 import tile.TileManager;
 
@@ -52,8 +55,10 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     
     Player player = new Player(this, keyH);
+    ArrayList<Monsters> monsters = new ArrayList<>();
     Ghost ghost = new Ghost(this, player);
     Rat rat = new Rat(this, player);
+    Battle battle = new Battle(monsters, player, this, keyH);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -61,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        monsters.add(ghost);
+        monsters.add(rat);
     }
 
     public void startGameThread() {
@@ -102,9 +109,13 @@ public class GamePanel extends JPanel implements Runnable {
             if (keyH.pausePressed) {
                 gameState = MENU;
             } else {
-                player.update();        
-                ghost.update();
-                rat.update();
+                battle.update();
+                if (!battle.inBattle) {
+                    player.update();        
+                    for (Monsters monster : monsters) {
+                        monster.update();
+                    }
+                }
             }
         }
     }
@@ -118,10 +129,14 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == MENU) {
             menu.render(g);
         } else {
-            tileM.draw(g2); //needs to be called first to no overlay Player
-            player.draw(g2);
-            ghost.draw(g2);
-            rat.draw(g2);
+            if (battle.inBattle) battle.draw(g2);
+            else {
+                tileM.draw(g2); //needs to be called first to no overlay Player
+                for (Monsters monster : monsters) {
+                    monster.draw(g2);
+                }
+                player.draw(g2);
+            }
         }
 
         g2.dispose();
