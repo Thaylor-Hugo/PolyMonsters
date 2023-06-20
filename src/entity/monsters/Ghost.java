@@ -1,6 +1,7 @@
 package entity.monsters;
 
-import entity.Player;
+import javax.swing.ImageIcon;
+
 import main.GamePanel;
 
 public class Ghost extends Monsters {
@@ -8,21 +9,23 @@ public class Ghost extends Monsters {
     int totalMoved = 0;
     boolean movingX = true;     // false means movingY
     boolean forward = true;     // false means backwards
+    private static String battlePath = "resources/monsters/ghosts/ghost1.gif";
 
-    public Ghost(GamePanel gp, Player player) {
+    public Ghost(GamePanel gp, int mapX, int mapY) {
         this.gp = gp;
-        this.player = player;
         setDefaltValues();
+        this.mapX = mapX;
+        this.mapY = mapY;
     }
 
     @Override
     protected void setDefaltValues() {
-        // TODO need to change defaut position
         visionRange = gp.tileSize * 3;
-        mapX = player.mapX + gp.tileSize * 10;
-        mapY = player.mapY + gp.tileSize;
+        mapX = gp.tileSize;
+        mapY = gp.tileSize;
         speed = 2;
         moving = true;
+        battleImage = new ImageIcon(battlePath).getImage();
     }
 
     @Override
@@ -58,6 +61,6 @@ public class Ghost extends Monsters {
 
     @Override
     protected String getEntityImagePath() {
-        return "resources/monsters/ghosts/ghost1.gif";
+        return battlePath;
     }
 }

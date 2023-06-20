@@ -1,28 +1,44 @@
 package entity.monsters;
 
+import java.util.Random;
+
 import javax.swing.ImageIcon;
 
 import main.GamePanel;
 
-public class Rat extends Monsters {
-    private static String downPath = "resources/monsters/rats/rat_down.gif";
-    private static String upPath = "resources/monsters/rats/rat_up.gif";
-    private static String rightPath = "resources/monsters/rats/rat_right.gif";
-    private static String leftPath = "resources/monsters/rats/rat_left.gif";
-    private static String battlePath = "resources/battle/rat.gif";
+public class Sereia extends Monsters {
+
+    private static String basicPath = "resources/monsters/sereias/";
+    private static String pinkPath = "pink/";
+    private static String greenPath = "green/";
+    private static String rightPath = "right.gif";
+    private static String leftPath = "left.gif";
+    private static String battlePath = "left.gif";
+    private final String finalRightPath;
+    private final String finalLeftPath;
     private static final int movingDown = 1;
     private static final int movingUp = 2;
     private static final int movingRight = 3;
     private static final int movingLeft = 4;
     private int movementDirection;
+    private boolean pink; // if false, its a green mermaid
 
     final int tilesToMove = 5;
     int totalMoved = 0;
     boolean movingX = true;     // false means movingY
     boolean forward = true;     // false means backwards
 
-    public Rat(GamePanel gp, int mapX, int mapY) {
+    public Sereia(GamePanel gp, int mapX, int mapY) {
         this.gp = gp;
+        Random rand = new Random();
+        pink = rand.nextBoolean();
+        if (pink) {
+            finalLeftPath = basicPath + pinkPath + leftPath;
+            finalRightPath = basicPath + pinkPath + rightPath;
+        } else {
+            finalLeftPath = basicPath + greenPath + leftPath;
+            finalRightPath = basicPath + greenPath + rightPath;
+        } 
         setDefaltValues();
         this.mapX = mapX;
         this.mapY = mapY;
@@ -30,12 +46,14 @@ public class Rat extends Monsters {
 
     @Override
     protected void setDefaltValues() {
-        visionRange = gp.tileSize * 1;
-        mapX = gp.tileSize * 10;
+        visionRange = gp.tileSize * 4;
+        mapX = gp.tileSize * 40;
         mapY = gp.tileSize;
         speed = 3;
         moving = true;
-        battleImage = new ImageIcon(battlePath).getImage();
+        if (pink) {
+            battleImage = new ImageIcon(basicPath + pinkPath + battlePath).getImage();
+        } else battleImage = new ImageIcon(basicPath + greenPath + battlePath).getImage();
     }
 
     @Override
@@ -86,23 +104,23 @@ public class Rat extends Monsters {
         String imagePath;
         switch (movementDirection) {
             case movingDown:
-                imagePath = downPath;
+                imagePath = finalLeftPath;
                 break;
 
             case movingLeft:
-                imagePath = leftPath;
+                imagePath = finalLeftPath;
                 break;
 
             case movingRight:
-                imagePath = rightPath;
+                imagePath = finalRightPath;
                 break;
 
             case movingUp:
-                imagePath = upPath;
+                imagePath = finalRightPath;
                 break;
 
             default:
-                imagePath = rightPath;
+                imagePath = finalRightPath;
                 break;
         }
         return imagePath;

@@ -1,6 +1,9 @@
 package entity;
 
 import java.awt.Graphics2D;
+
+import javax.swing.ImageIcon;
+
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -14,6 +17,7 @@ public class Player extends Entity {
     private static String sprintingUpPath = "resources/player/movement/sprinting_up.gif";
     private static String sprintingRightPath = "resources/player/movement/sprinting_right.gif";
     private static String sprintingLeftPath = "resources/player/movement/sprinting_left.gif";
+    private static String battlePath = "resources/battle/player.gif";
     private static final int movingDown = 1;
     private static final int movingUp = 2;
     private static final int movingRight = 3;
@@ -57,6 +61,7 @@ public class Player extends Entity {
         lastSafeY = mapY;
         walkedX = 0;
         walkedY = 0;
+        battleImage = new ImageIcon(battlePath).getImage();
     }
     
     @Override

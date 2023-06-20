@@ -1,28 +1,53 @@
 package entity.monsters;
 
+import java.util.Random;
+
 import javax.swing.ImageIcon;
 
 import main.GamePanel;
 
-public class Rat extends Monsters {
-    private static String downPath = "resources/monsters/rats/rat_down.gif";
-    private static String upPath = "resources/monsters/rats/rat_up.gif";
-    private static String rightPath = "resources/monsters/rats/rat_right.gif";
-    private static String leftPath = "resources/monsters/rats/rat_left.gif";
-    private static String battlePath = "resources/battle/rat.gif";
+public class Zombie extends Monsters {
+
+    private static String basicPath = "resources/monsters/zombies/";
+    private static String mostAlivePath = "mostAlive/";
+    private static String mostDeadPath = "mostDead/";
+    private static String rightPath = "right.gif";
+    private static String leftPath = "left.gif";
+    private static String upPath = "up.gif";
+    private static String downPath = "down.gif";
+    private static String battlePathMostAlive = "resources/battle/zombies/mostAlive.gif";
+    private static String battlePathMostDead = "resources/battle/zombies/mostDead.gif";
+    private final String finalRightPath;
+    private final String finalLeftPath;
+    private final String finalUpPath;
+    private final String finalDownPath;
     private static final int movingDown = 1;
     private static final int movingUp = 2;
     private static final int movingRight = 3;
     private static final int movingLeft = 4;
     private int movementDirection;
+    private boolean mostDead; // if false, its a mostAlive zombie
 
     final int tilesToMove = 5;
     int totalMoved = 0;
     boolean movingX = true;     // false means movingY
     boolean forward = true;     // false means backwards
 
-    public Rat(GamePanel gp, int mapX, int mapY) {
+    public Zombie(GamePanel gp, int mapX, int mapY) {
         this.gp = gp;
+        Random rand = new Random();
+        mostDead = rand.nextBoolean();
+        if (mostDead) {
+            finalLeftPath = basicPath + mostDeadPath + leftPath;
+            finalRightPath = basicPath + mostDeadPath + rightPath;
+            finalUpPath = basicPath + mostDeadPath + upPath;
+            finalDownPath = basicPath + mostDeadPath + downPath;
+        } else {
+            finalLeftPath = basicPath + mostAlivePath + leftPath;
+            finalRightPath = basicPath + mostAlivePath + rightPath;
+            finalUpPath = basicPath + mostAlivePath + upPath;
+            finalDownPath = basicPath + mostAlivePath + downPath;
+        } 
         setDefaltValues();
         this.mapX = mapX;
         this.mapY = mapY;
@@ -30,12 +55,17 @@ public class Rat extends Monsters {
 
     @Override
     protected void setDefaltValues() {
-        visionRange = gp.tileSize * 1;
-        mapX = gp.tileSize * 10;
+        visionRange = gp.tileSize * 4;
+        mapX = gp.tileSize * 50;
         mapY = gp.tileSize;
-        speed = 3;
         moving = true;
-        battleImage = new ImageIcon(battlePath).getImage();
+        if (mostDead) {
+            battleImage = new ImageIcon(battlePathMostDead).getImage();
+            speed = 1;
+        } else {
+            battleImage = new ImageIcon(battlePathMostAlive).getImage();
+            speed = 2;
+        }
     }
 
     @Override
@@ -86,23 +116,23 @@ public class Rat extends Monsters {
         String imagePath;
         switch (movementDirection) {
             case movingDown:
-                imagePath = downPath;
+                imagePath = finalDownPath;
                 break;
 
             case movingLeft:
-                imagePath = leftPath;
+                imagePath = finalLeftPath;
                 break;
 
             case movingRight:
-                imagePath = rightPath;
+                imagePath = finalRightPath;
                 break;
 
             case movingUp:
-                imagePath = upPath;
+                imagePath = finalUpPath;
                 break;
 
             default:
-                imagePath = rightPath;
+                imagePath = finalDownPath;
                 break;
         }
         return imagePath;

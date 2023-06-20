@@ -15,6 +15,7 @@ public abstract class Entity {
     public int speed;
     public boolean moving;
     public Image entityImage;
+    public Image battleImage;
     protected GamePanel gp;
 
     abstract protected void setDefaltValues();

@@ -5,14 +5,19 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
 import actions.Battle;
 import entity.Player;
 import entity.monsters.Ghost;
+import entity.monsters.Goblin;
+import entity.monsters.Golem;
 import entity.monsters.Monsters;
 import entity.monsters.Rat;
+import entity.monsters.Sereia;
+import entity.monsters.Zombie;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -56,8 +61,6 @@ public class GamePanel extends JPanel implements Runnable {
     
     Player player = new Player(this, keyH);
     ArrayList<Monsters> monsters = new ArrayList<>();
-    Ghost ghost = new Ghost(this, player);
-    Rat rat = new Rat(this, player);
     Battle battle = new Battle(monsters, player, this, keyH);
 
     public GamePanel() {
@@ -66,8 +69,23 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
-        monsters.add(ghost);
-        monsters.add(rat);
+        for (int i = 0; i < 120; i++) {
+            // Cria 20 monstros de cada tipo, espalhados aleatoriamente
+            Random rand = new Random();
+            if (i < 20) {
+                monsters.add(new Ghost(this, rand.nextInt(0, mapWidth - tileSize), rand.nextInt(0, mapHeight - tileSize)));
+            } else if (i < 40) {
+                monsters.add(new Goblin(this, rand.nextInt(0, mapWidth - tileSize), rand.nextInt(0, mapHeight - tileSize)));
+            } else if (i < 60) {
+                monsters.add(new Golem(this, rand.nextInt(0, mapWidth - tileSize), rand.nextInt(0, mapHeight - tileSize)));
+            } else if (i < 80) {
+                monsters.add(new Rat(this, rand.nextInt(0, mapWidth - tileSize), rand.nextInt(0, mapHeight - tileSize)));
+            } else if(i < 100) {
+                monsters.add(new Sereia(this, rand.nextInt(0, mapWidth - tileSize), rand.nextInt(0, mapHeight - tileSize)));
+            } else if (i < 120) {
+                monsters.add(new Zombie(this, rand.nextInt(0, mapWidth - tileSize), rand.nextInt(0, mapHeight - tileSize)));
+            }
+        }
     }
 
     public void startGameThread() {
