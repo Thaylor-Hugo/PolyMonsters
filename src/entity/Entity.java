@@ -10,13 +10,15 @@ import javax.swing.ImageIcon;
 import main.GamePanel;
 
 public abstract class Entity {
-    public int mapX;    //position related to the world map
+    public int mapX;    // position related to the world map
     public int mapY;
     public int speed;
     public boolean moving;
     public Image entityImage;
     public Image battleImage;
     protected GamePanel gp;
+    public int hp;              // valor de hp que entidade possui no momento
+    public int damage;
 
     abstract protected void setDefaltValues();
     abstract public void update();
@@ -40,4 +42,6 @@ public abstract class Entity {
         entityImage = getEntityImage();
         g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
+
+    abstract public int getRefHp(); // Valor de referencia que representa 100% de HP
 }

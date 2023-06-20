@@ -32,6 +32,13 @@ public class Golem extends Monsters {
         speed = 1;
         moving = true;
         battleImage = new ImageIcon(battlePath).getImage();
+        hp = 300;
+        damage = 30;
+    }
+
+    @Override
+    public int getRefHp() {
+        return 300;
     }
 
     @Override

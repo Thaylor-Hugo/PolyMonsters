@@ -32,6 +32,13 @@ public class Goblin extends Monsters {
         speed = 3;
         moving = true;
         battleImage = new ImageIcon(battlePath).getImage();
+        hp = 100;
+        damage = 10;
+    }
+
+    @Override
+    public int getRefHp() {
+        return 100;
     }
 
     @Override

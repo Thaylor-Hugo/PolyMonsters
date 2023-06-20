@@ -54,6 +54,13 @@ public class Sereia extends Monsters {
         if (pink) {
             battleImage = new ImageIcon(basicPath + pinkPath + battlePath).getImage();
         } else battleImage = new ImageIcon(basicPath + greenPath + battlePath).getImage();
+        hp = 150;
+        damage = 15;
+    }
+
+    @Override
+    public int getRefHp() {
+        return 150;
     }
 
     @Override

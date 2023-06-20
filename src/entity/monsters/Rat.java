@@ -36,6 +36,13 @@ public class Rat extends Monsters {
         speed = 3;
         moving = true;
         battleImage = new ImageIcon(battlePath).getImage();
+        hp = 50;
+        damage = 5;
+    }
+
+    @Override
+    public int getRefHp() {
+        return 50;
     }
 
     @Override

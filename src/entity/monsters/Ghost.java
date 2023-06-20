@@ -26,6 +26,13 @@ public class Ghost extends Monsters {
         speed = 2;
         moving = true;
         battleImage = new ImageIcon(battlePath).getImage();
+        hp = 200;
+        damage = 20;
+    }
+
+    @Override
+    public int getRefHp() {
+        return 200;
     }
 
     @Override

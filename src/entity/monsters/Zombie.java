@@ -62,10 +62,19 @@ public class Zombie extends Monsters {
         if (mostDead) {
             battleImage = new ImageIcon(battlePathMostDead).getImage();
             speed = 1;
+            hp = 60;
+            damage = 6;
         } else {
             battleImage = new ImageIcon(battlePathMostAlive).getImage();
             speed = 2;
+            hp = 80;
+            damage = 8;
         }
+    }
+
+    @Override
+    public int getRefHp() {
+        return 100;
     }
 
     @Override

@@ -62,6 +62,13 @@ public class Player extends Entity {
         walkedX = 0;
         walkedY = 0;
         battleImage = new ImageIcon(battlePath).getImage();
+        hp = 100;
+        damage = 10;
+    }
+
+    @Override
+    public int getRefHp() {
+        return 100;
     }
     
     @Override
