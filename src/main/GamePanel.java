@@ -122,4 +122,9 @@ public class GamePanel extends JPanel implements Runnable {
     public Player getPlayer() {
         return player;
     }
+    
+    public TileManager getTileM() {
+        return tileM;
+    }
+
 }

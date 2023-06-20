@@ -14,6 +14,7 @@ public class TileManager {
 
     GamePanel gp;
     Tile[] tile;
+
     int mapTileNum[][];
 
     public TileManager(GamePanel gp) {
@@ -142,5 +143,11 @@ public class TileManager {
             }
         }
     }
-    
+
+    public int[][] getMapTileNum() {
+        return mapTileNum;
+    }
+    public Tile[] getTile() {
+        return tile;
+    }
 }
