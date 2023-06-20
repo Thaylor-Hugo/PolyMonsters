@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 import entity.Player;
 import entity.monsters.Monsters;
@@ -23,6 +24,7 @@ public class Battle {
     private String[] options = {"Ataque", "Ataque Carregado", "Usar item", "Fugir"};
     private int currentOption = 0;
     private int maxOption = options.length - 1;
+    private boolean playerTurn;
 
     public Battle(ArrayList<Monsters> monsters, Player player, GamePanel gp, KeyHandler keyH) {
         this.monsters = monsters;
@@ -32,10 +34,12 @@ public class Battle {
     }
 
     public boolean inBattle() {
+        Random rand = new Random();
         for (Monsters monster : monsters) {
             if (inBattleRange(monster)) {
                 battleMonster = monster;
                 inBattle = true;
+                playerTurn = rand.nextBoolean();
                 return inBattle;
             }
         }
@@ -64,6 +68,16 @@ public class Battle {
         drawOptions(g2);
     }
 
+    private void drawLifeBar(Graphics2D g2, int hp, int refHp, int x, int y) {
+        int lifeBarWidth = gp.tileSize * 3 * hp / refHp;
+        g2.setColor(Color.RED);
+        g2.fillRect(x, y, lifeBarWidth, gp.tileSize / 5);
+        
+        g2.setColor(Color.BLACK);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRect(x, y, gp.tileSize * 3, gp.tileSize / 5);
+    }
+
     private void drawBattleDisplay(Graphics2D g2) {
         // Display window with the battle view
         g2.setColor(new Color(207,229,228));
@@ -79,8 +93,10 @@ public class Battle {
         g2.drawRect(gp.tileSize-5, gp.tileSize-5, gp.screenWidth - 2*gp.tileSize + 10, gp.screenHeight/2 + 10);
     
         // Cenario
-        g2.drawImage(player.entityImage, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, gp.tileSize * 3, null);
-        g2.drawImage(battleMonster.entityImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
+        g2.drawImage(player.battleImage, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, gp.tileSize * 3, null);
+        g2.drawImage(battleMonster.battleImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
+        drawLifeBar(g2, player.hp, player.getRefHp(), gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize);
+        drawLifeBar(g2, battleMonster.hp, battleMonster.getRefHp(), gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2);
     }
 
     private void drawOptions(Graphics2D g2) {
@@ -120,53 +136,76 @@ public class Battle {
     public void update() {
         if (!inBattle) inBattle();
         if (inBattle) {
-            if(keyH.downPressed) {
-			    currentOption += 2;
-    			keyH.downPressed = false;
-			    if(currentOption > maxOption) currentOption -= options.length;
-		    }
-            if(keyH.upPressed) {
-			    currentOption -= 2;
-    			keyH.upPressed = false;
-			    if(currentOption < 0) currentOption += options.length;
-		    }
-            if(keyH.rightPressed) {
-			    currentOption += 1;
-    			keyH.rightPressed = false;
-			    if(currentOption > maxOption) currentOption -= options.length;
-		    }
-            if(keyH.leftPressed) {
-			    currentOption -= 1;
-    			keyH.leftPressed = false;
-			    if(currentOption < 0) currentOption += options.length;
-		    }
-            if(keyH.interrectPressed) {
-                // TODO: Improve how the battle works
-                if (currentOption == 0) {
-                    // Normal atack
-                    inBattle = false;
-                    monsters.remove(battleMonster);
-                }
-                if (currentOption == 1) {
-                    // Charged atack
-                    inBattle = false;
-                    monsters.remove(battleMonster);
-                }
-                if (currentOption == 2) {
-                    // Itens
-                    
-                }
-                if (currentOption == 3) {
-                    // Run away
-                    if (player.speed > battleMonster.speed) {
-                        // Player is able to run away
-                        player.setOnLastSafePosition();
-                        inBattle = false;
-                    } else {
-                        // Couldn't run
-                    }
-                }
+            choseOption();
+            if (playerTurn) {
+                if(keyH.interrectPressed) playerAction();    
             }
+            else {
+                player.hp -= battleMonster.damage;
+                playerTurn = true;
+            }
+            if (player.hp <= 0) {
+                player.setOnLastSafePosition();
+                player.hp = player.getRefHp();
+                battleMonster.hp = battleMonster.getRefHp();
+                inBattle = false;
+            }
+            if (battleMonster.hp == 0) {
+                monsters.remove(battleMonster);
+                inBattle = false;
+            }
+        }
+    }
+
+    private void playerAction() {
+        if (currentOption == 0) {
+            // Normal atack
+            battleMonster.hp -= player.damage;
+            playerTurn = false;
+        }
+        if (currentOption == 1) {
+            // Charged atack
+            battleMonster.hp -= player.damage;
+            playerTurn = false;
+        }
+        if (currentOption == 2) {
+            // Itens
+        }
+        if (currentOption == 3) {
+            // Run away
+            if (player.speed > battleMonster.speed) {
+                // Player is able to run away
+                player.setOnLastSafePosition();
+                inBattle = false;
+            } else if (player.speed == battleMonster.speed) {
+                player.hp -= battleMonster.damage;
+            } else {
+                player.hp -= battleMonster.damage * 2;  // Bonus atack cause failed run
+            }
+        }
+        keyH.interrectPressed = false;
+    }
+
+    private void choseOption() {
+        if(keyH.downPressed) {
+            currentOption += 2;
+        	keyH.downPressed = false;
+            if(currentOption > maxOption) currentOption -= options.length;
+        }
+        if(keyH.upPressed) {
+            currentOption -= 2;
+        	keyH.upPressed = false;
+            if(currentOption < 0) currentOption += options.length;
+        }
+        if(keyH.rightPressed) {
+            currentOption += 1;
+        	keyH.rightPressed = false;
+            if(currentOption > maxOption) currentOption -= options.length;
+        }
+        if(keyH.leftPressed) {
+            currentOption -= 1;
+        	keyH.leftPressed = false;
+            if(currentOption < 0) currentOption += options.length;
         }
     }
 }
