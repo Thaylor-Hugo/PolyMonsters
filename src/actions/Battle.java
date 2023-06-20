@@ -1,4 +1,3 @@
-// TODO: battleState (improve update() and draw())
 package actions;
 
 import java.awt.BasicStroke;
@@ -20,11 +19,26 @@ public class Battle {
     GamePanel gp;
     Monsters battleMonster;
     KeyHandler keyH;
-
+    
     private String[] options = {"Ataque", "Ataque Carregado", "Usar item", "Fugir"};
     private int currentOption = 0;
     private int maxOption = options.length - 1;
     private boolean playerTurn;
+    private boolean chargedAtack;
+    private int chargedPosition;
+    private int chargedSpeed;
+    private int chargedGoal;
+    private int chargedRange;
+    private boolean chargedForward; // If false, chargePosition going backwards
+    private final int displayTime = 60; // Time to display damage taken or dealt
+    private boolean wasDamageDealt = false;
+    private boolean wasDamageTaken = false;
+    private boolean damageDealtOnDisplay = false;
+    private boolean damageTakenOnDisplay = false;
+    private int damageDealtTime = 0; // time on display
+    private int damageTakenTime = 0;
+    private double damageDealt = 0;    // Value of the damage
+    private int damageTaken = 0;
 
     public Battle(ArrayList<Monsters> monsters, Player player, GamePanel gp, KeyHandler keyH) {
         this.monsters = monsters;
@@ -40,6 +54,7 @@ public class Battle {
                 battleMonster = monster;
                 inBattle = true;
                 playerTurn = rand.nextBoolean();
+                chargedAtack = false;
                 return inBattle;
             }
         }
@@ -97,6 +112,101 @@ public class Battle {
         g2.drawImage(battleMonster.battleImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
         drawLifeBar(g2, player.hp, player.getRefHp(), gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize);
         drawLifeBar(g2, battleMonster.hp, battleMonster.getRefHp(), gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2);
+                
+        drawDamage(g2, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize - 7, gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2 - 7);
+
+        if (chargedAtack) drawChargedAtack(g2);
+    }
+
+    private void drawDamage(Graphics2D g2, int damageTakenX, int damageTakenY, int damageDealtX, int damageDealtY) {
+        if (wasDamageDealt) {
+            damageDealtOnDisplay = true;
+            damageDealtTime = 0;
+            wasDamageDealt = false;
+        }
+        if (wasDamageTaken) {
+            damageTakenOnDisplay = true;
+            damageTakenTime = 0;
+            wasDamageTaken = false;
+        }
+        g2.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        if (damageDealtOnDisplay) {
+            if (damageDealtTime >= displayTime) damageDealtOnDisplay = false;
+            g2.drawString(""+(int)damageDealt, damageDealtX, damageDealtY);
+            damageDealtTime += 1;
+        }
+        if (damageTakenOnDisplay) {
+            if (damageTakenTime >= displayTime) damageTakenOnDisplay = false;
+            g2.drawString(""+(int)damageTaken, damageTakenX, damageTakenY);
+            damageTakenTime += 1;
+        }
+
+    }
+
+    private void drawChargedAtack(Graphics2D g2) {
+        int positionOrigin = gp.tileSize * 8;
+        int barWidth = gp.tileSize * 6;
+        int positionEnd = positionOrigin + barWidth;
+        int goalWidth = 2*chargedRange;
+        int goalPosition = chargedGoal - chargedRange;
+        int penaltyWidth = 4*chargedRange;
+        int penaltyPosition = chargedGoal - 2*chargedRange;
+
+        // Penalty or Goal is on left edge
+        if (goalPosition + positionOrigin < positionOrigin) {
+            goalWidth += goalPosition;
+            goalPosition = 0;
+        }
+        if (penaltyPosition + positionOrigin < positionOrigin) {
+            penaltyWidth += penaltyPosition;
+            penaltyPosition = 0;
+        }
+        // Penalty or Goal is on right edge
+        if (goalPosition + goalWidth + positionOrigin > positionEnd) {
+            goalWidth -= goalPosition + goalWidth + positionOrigin - positionEnd;
+        }
+        if (penaltyPosition + penaltyWidth + positionOrigin > positionEnd) {
+            penaltyWidth -= penaltyPosition + penaltyWidth + positionOrigin - positionEnd;
+        }
+        
+        updateChargedPosition();
+    
+        // Bar
+        g2.setColor(new Color(49, 2, 97));
+        g2.fillRect(positionOrigin, gp.screenHeight/2, barWidth , gp.tileSize / 5);
+        
+        // Penalty
+        g2.setColor(Color.RED);
+        g2.fillRect(penaltyPosition + positionOrigin, gp.screenHeight/2, penaltyWidth , gp.tileSize / 5);
+        
+        // Goal
+        g2.setColor(Color.YELLOW);
+        g2.fillRect(goalPosition + positionOrigin, gp.screenHeight/2, goalWidth , gp.tileSize / 5);
+        
+        // Borda
+        g2.setColor(Color.BLACK);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRect(positionOrigin, gp.screenHeight/2, barWidth, gp.tileSize / 5);
+        
+        // ChargedPosition
+        g2.fillRect(chargedPosition + positionOrigin, gp.screenHeight/2 - gp.tileSize / 5, 5, 3 * gp.tileSize / 5);
+    }
+
+    private void updateChargedPosition() {
+        if (chargedPosition >= gp.tileSize*6) {
+            chargedForward = false;
+            chargedSpeed += 1;
+        }
+        if (chargedPosition <= 0) {
+            chargedForward = true;
+            chargedSpeed += 1;
+        }
+        if (chargedSpeed > 10) chargedSpeed = 10;
+        if (chargedForward) {
+            chargedPosition += chargedSpeed;
+        } else {
+            chargedPosition -= chargedSpeed;
+        }    
     }
 
     private void drawOptions(Graphics2D g2) {
@@ -136,13 +246,41 @@ public class Battle {
     public void update() {
         if (!inBattle) inBattle();
         if (inBattle) {
-            choseOption();
-            if (playerTurn) {
-                if(keyH.interrectPressed) playerAction();    
-            }
-            else {
-                player.hp -= battleMonster.damage;
-                playerTurn = true;
+            if (chargedAtack) {
+                if(keyH.interrectPressed) {
+                    Random rand = new Random();
+                    if (chargedPosition <= chargedGoal + chargedRange && chargedPosition >= chargedGoal - chargedRange) {
+                        damageDealt = player.damage * rand.nextDouble(1, 3);
+                        battleMonster.hp -= damageDealt;
+                        wasDamageDealt = true;
+                        playerTurn = false;
+                        chargedAtack = false;
+                    } else if (chargedPosition <= chargedGoal + 2*chargedRange && chargedPosition >= chargedGoal - 2*chargedRange) {
+                        damageDealt = player.damage * rand.nextDouble(1);
+                        battleMonster.hp -= damageDealt;
+                        wasDamageDealt = true;
+                        playerTurn = false;
+                        chargedAtack = false;
+                    } else {
+                        battleMonster.hp -= player.damage;
+                        damageDealt = player.damage;
+                        wasDamageDealt = true;
+                        playerTurn = false;
+                        chargedAtack = false;
+                    }
+                    keyH.interrectPressed = false;
+                }
+            } else {
+                choseOption();
+                if (playerTurn) {
+                    if(keyH.interrectPressed) playerAction();    
+                }
+                else {
+                    player.hp -= battleMonster.damage;
+                    playerTurn = true;
+                    wasDamageTaken = true;
+                    damageTaken = battleMonster.damage;
+                }
             }
             if (player.hp <= 0) {
                 player.setOnLastSafePosition();
@@ -150,7 +288,7 @@ public class Battle {
                 battleMonster.hp = battleMonster.getRefHp();
                 inBattle = false;
             }
-            if (battleMonster.hp == 0) {
+            if (battleMonster.hp <= 0) {
                 monsters.remove(battleMonster);
                 inBattle = false;
             }
@@ -161,12 +299,18 @@ public class Battle {
         if (currentOption == 0) {
             // Normal atack
             battleMonster.hp -= player.damage;
+            damageDealt = player.damage;
+            wasDamageDealt = true;
             playerTurn = false;
         }
         if (currentOption == 1) {
             // Charged atack
-            battleMonster.hp -= player.damage;
-            playerTurn = false;
+            Random rand = new Random();
+            chargedAtack = true;
+            chargedGoal = rand.nextInt(gp.tileSize*6);
+            chargedRange = rand.nextInt(5, gp.tileSize);
+            chargedPosition = rand.nextInt(gp.tileSize*6);
+            chargedSpeed = rand.nextInt(1, 6);
         }
         if (currentOption == 2) {
             // Itens
@@ -179,8 +323,12 @@ public class Battle {
                 inBattle = false;
             } else if (player.speed == battleMonster.speed) {
                 player.hp -= battleMonster.damage;
+                damageTaken = battleMonster.damage;
+                wasDamageTaken = true;
             } else {
-                player.hp -= battleMonster.damage * 2;  // Bonus atack cause failed run
+                player.hp -= battleMonster.damage * 2;  // Bonus atack cause failed to run
+                damageTaken = battleMonster.damage * 2;
+                wasDamageTaken = true;
             }
         }
         keyH.interrectPressed = false;
