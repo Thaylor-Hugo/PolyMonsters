@@ -1,10 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import main.GamePanel;
@@ -20,6 +17,7 @@ public class Player extends Entity {
     private static String sprintingUpPath = "resources/player/movement/sprinting_up.gif";
     private static String sprintingRightPath = "resources/player/movement/sprinting_right.gif";
     private static String sprintingLeftPath = "resources/player/movement/sprinting_left.gif";
+    private static String battlePath = "resources/battle/player.gif";
     private static final int movingDown = 1;
     private static final int movingUp = 2;
     private static final int movingRight = 3;
@@ -29,11 +27,15 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
-    GamePanel gp;
     KeyHandler keyH;
     public boolean sprinting;
-    public boolean moving;
     public int movementDirection;
+
+    private final int safeDistance;
+    private int walkedX;
+    private int walkedY;
+    private int lastSafeX;
+    private int lastSafeY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -44,22 +46,78 @@ public class Player extends Entity {
         screenY = gp.screenHeight/2 - gp.tileSize/2;
 
         setDefaltValues();
-        getPlayerImage(sprinting, movementDirection);
+        safeDistance = gp.tileSize * 5;
+    }
+    
+    @Override
+    protected void setDefaltValues() {
+        mapX = gp.tileSize*36;     //position related to the world map
+        mapY = gp.tileSize*84/2;
+        speed = 2;
+        sprinting = false;
+        moving = false;
+        movementDirection = movingDown;
+        lastSafeX = mapX;
+        lastSafeY = mapY;
+        walkedX = 0;
+        walkedY = 0;
+        battleImage = new ImageIcon(battlePath).getImage();
+        hp = 100;
+        damage = 10;
     }
 
-    private void getPlayerImage(boolean sprinting, int movementDirection) {
-        String imagePath = getImagePath(sprinting, movementDirection);
-        if (moving) entityImage = new ImageIcon(imagePath).getImage();
-        else
-            try {
-                entityImage = ImageIO.read(new File(imagePath));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+    @Override
+    public int getRefHp() {
+        return 100;
+    }
+    
+    @Override
+    public void update() {
+        int finalSpeed = speed;
+        if (keyH.sprintPressed) {
+            sprinting = true;
+            finalSpeed += 2;
+        } else {
+            sprinting = false;
+        }
+        moving = true;
+        if (keyH.downPressed) {
+            mapY += finalSpeed;
+            movementDirection = movingDown;
+            walkedY += finalSpeed;
+        } else if (keyH.leftPressed) {
+            mapX -= finalSpeed;
+            movementDirection = movingLeft;
+            walkedX += finalSpeed;
+        } else if (keyH.rightPressed) {
+            mapX += finalSpeed;   
+            movementDirection = movingRight;
+            walkedX += finalSpeed;
+        } else if (keyH.upPressed) {
+            mapY -= finalSpeed;
+            movementDirection = movingUp;
+            walkedY += finalSpeed;
+        } else {
+            moving = false;
+        }
+        if (walkedX >= safeDistance) {
+            walkedX = 0;
+            lastSafeX = mapX;
+        }
+        if (walkedY >= safeDistance) {
+            walkedY = 0;
+            lastSafeY = mapY;
+        }
     }
 
-    private String getImagePath(boolean sprinting, int movementDirection) {
+    @Override
+    public void draw(Graphics2D g2) {
+        entityImage = getEntityImage();
+        g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
+    }
+
+    @Override
+    protected String getEntityImagePath() {
         String imagePath;
         switch (movementDirection) {
             case movingDown:
@@ -89,48 +147,9 @@ public class Player extends Entity {
         }
         return imagePath;
     }
-    
-    @Override
-    void setDefaltValues() {
-        mapX = gp.tileSize*36;     //position related to the world map
-        mapY = gp.tileSize*84/2;
-        speed = 2;
-        sprinting = false;
-        moving = false;
-        movementDirection = movingDown;
-    }
-    
-    @Override
-    public void update() {
-        int finalSpeed = speed;
-        if (keyH.sprintPressed) {
-            sprinting = true;
-            finalSpeed += 2;
-        } else {
-            sprinting = false;
-        }
-        moving = true;
-        if (keyH.downPressed) {
-            mapY += finalSpeed;
-            movementDirection = movingDown;
-        } else if (keyH.leftPressed) {
-            mapX -= finalSpeed;
-            movementDirection = movingLeft;
-        } else if (keyH.rightPressed) {
-            mapX += finalSpeed;   
-            movementDirection = movingRight;
-        } else if (keyH.upPressed) {
-            mapY -= finalSpeed;
-            movementDirection = movingUp;
-        } else {
-            moving = false;
-        }
-    }
 
-    @Override
-    public void draw(Graphics2D g2) {
-        getPlayerImage(sprinting, movementDirection);
-        g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
+    public void setOnLastSafePosition() {
+        mapX = lastSafeX;
+        mapY = lastSafeY;
     }
-    
 }
