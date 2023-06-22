@@ -32,7 +32,7 @@ public class MoveControled implements MovementStrategy {
             entity.setMovementDirection(MovementDirection.RIGHT);
         } else if (keyH.upPressed) {
             entity.mapY -= entity.speed;
-            entity.setMovementDirection(MovementDirection.RIGHT);
+            entity.setMovementDirection(MovementDirection.UP);
         } else {
             entity.moving = false;
         }
