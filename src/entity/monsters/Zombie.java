@@ -4,6 +4,9 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import actions.movements.enums.MovementDirection;
+import actions.movements.enums.MovementTypes;
+import entity.Player;
 import main.GamePanel;
 
 public class Zombie extends Monsters {
@@ -21,20 +24,14 @@ public class Zombie extends Monsters {
     private final String finalLeftPath;
     private final String finalUpPath;
     private final String finalDownPath;
-    private static final int movingDown = 1;
-    private static final int movingUp = 2;
-    private static final int movingRight = 3;
-    private static final int movingLeft = 4;
-    private int movementDirection;
     private boolean mostDead; // if false, its a mostAlive zombie
+    private Player player;
 
     final int tilesToMove = 5;
-    int totalMoved = 0;
-    boolean movingX = true;     // false means movingY
-    boolean forward = true;     // false means backwards
 
-    public Zombie(GamePanel gp, int mapX, int mapY) {
+    public Zombie(GamePanel gp, int mapX, int mapY, Player player) {
         this.gp = gp;
+        this.player = player;
         Random rand = new Random();
         mostDead = rand.nextBoolean();
         if (mostDead) {
@@ -70,6 +67,8 @@ public class Zombie extends Monsters {
             hp = 80;
             damage = 8;
         }
+        mvDirect = MovementDirection.DOWN;
+        setMovementStrategy(MovementTypes.RANDOM, tilesToMove * gp.tileSize, null);
     }
 
     @Override
@@ -79,64 +78,37 @@ public class Zombie extends Monsters {
 
     @Override
     public void update() {
-        // TODO better moviment strategy
-        int totalToMove = tilesToMove * gp.tileSize;
-        if (movingX) {
-            if (forward) {
-                mapX += speed;
-                movementDirection = movingRight;
-            }
-            else {
-                mapX -= speed;
-                movementDirection = movingLeft;
-            }
-            totalMoved += speed;
-            
-        } else {
-            if (forward) {
-                mapY += speed;
-                movementDirection = movingDown;
-            }
-            else {
-                mapY -= speed;
-                movementDirection = movingUp;
-            } 
-            totalMoved += speed;
-        }
+        if (inFollowRange()) mvStrategy.follow(player, this, gp.tileSize);
+        else mvStrategy.move(this);
+    }
 
-        if (totalMoved >= totalToMove) {
-            if (movingX && forward) {
-                movingX = false;
-            }else if (!movingX && forward) {
-                movingX = true;
-                forward = false;
-            }else if (movingX && !forward) {
-                movingX = false;
-            }else if (!movingX && !forward) {
-                movingX = true;
-                forward = true;
-            }
-            totalMoved = 0;
-        }
+    private boolean inFollowRange() {
+        int followRange = visionRange * 2;
+        int monsterDistanceX = (mapX + (gp.tileSize / 2)) - (player.mapX + (gp.tileSize / 2));
+        int monsterDistanceY = (mapY + (gp.tileSize / 2)) - (player.mapY + (gp.tileSize / 2));
+        double monsterDistance = Math.sqrt(Math.pow(monsterDistanceX, 2) + Math.pow(monsterDistanceY, 2));
+        
+        if (monsterDistance <= followRange) return true;
+        return false;
     }
 
     @Override
     protected String getEntityImagePath() {
         String imagePath;
-        switch (movementDirection) {
-            case movingDown:
+        switch (mvDirect) {
+            case DOWN:
                 imagePath = finalDownPath;
                 break;
 
-            case movingLeft:
+            case LEFT:
                 imagePath = finalLeftPath;
                 break;
 
-            case movingRight:
+            case RIGHT:
                 imagePath = finalRightPath;
                 break;
 
-            case movingUp:
+            case UP:
                 imagePath = finalUpPath;
                 break;
 
@@ -146,5 +118,4 @@ public class Zombie extends Monsters {
         }
         return imagePath;
     }
-    
 }
