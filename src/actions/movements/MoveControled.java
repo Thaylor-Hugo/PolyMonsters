@@ -16,16 +16,16 @@ public class MoveControled implements MovementStrategy {
         entity.moving = true;
         if (keyH.downPressed) {
             entity.mapY += entity.speed;
-            entity.setMovimentDirection(MovementDirection.DOWN);
+            entity.setMovementDirection(MovementDirection.DOWN);
         } else if (keyH.leftPressed) {
             entity.mapX -= entity.speed;
-            entity.setMovimentDirection(MovementDirection.LEFT);
+            entity.setMovementDirection(MovementDirection.LEFT);
         } else if (keyH.rightPressed) {
             entity.mapX += entity.speed;   
-            entity.setMovimentDirection(MovementDirection.RIGHT);
+            entity.setMovementDirection(MovementDirection.RIGHT);
         } else if (keyH.upPressed) {
             entity.mapY -= entity.speed;
-            entity.setMovimentDirection(MovementDirection.RIGHT);
+            entity.setMovementDirection(MovementDirection.RIGHT);
         } else {
             entity.moving = false;
         }

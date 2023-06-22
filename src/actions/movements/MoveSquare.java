@@ -19,10 +19,10 @@ public class MoveSquare implements MovementStrategy {
     @Override
     public void move(Entity entity) {
         entity.moving = true;
-        if (entity.getMovimentDirection() == MovementDirection.DOWN)       entity.mapY += entity.speed;
-        else if (entity.getMovimentDirection() == MovementDirection.UP)    entity.mapY -= entity.speed;
-        else if (entity.getMovimentDirection() == MovementDirection.RIGHT) entity.mapX += entity.speed;
-        else if (entity.getMovimentDirection() == MovementDirection.LEFT)  entity.mapX -= entity.speed;
+        if (entity.getMovementDirection() == MovementDirection.DOWN)       entity.mapY += entity.speed;
+        else if (entity.getMovementDirection() == MovementDirection.UP)    entity.mapY -= entity.speed;
+        else if (entity.getMovementDirection() == MovementDirection.RIGHT) entity.mapX += entity.speed;
+        else if (entity.getMovementDirection() == MovementDirection.LEFT)  entity.mapX -= entity.speed;
         totalMoved += entity.speed;
         if (totalMoved >= totalToMove) {
             changeDirection(entity);
@@ -32,21 +32,21 @@ public class MoveSquare implements MovementStrategy {
 
     private void changeDirection(Entity entity) {
         // Change the Movementdirection to next, forming a square
-        if (entity.getMovimentDirection() == MovementDirection.DOWN) 
-            entity.setMovimentDirection(MovementDirection.LEFT);
-        else if (entity.getMovimentDirection() == MovementDirection.LEFT)
-            entity.setMovimentDirection(MovementDirection.UP);
-        else if (entity.getMovimentDirection() == MovementDirection.UP)
-            entity.setMovimentDirection(MovementDirection.RIGHT);
-        else if (entity.getMovimentDirection() == MovementDirection.RIGHT)
-            entity.setMovimentDirection(MovementDirection.DOWN);
+        if (entity.getMovementDirection() == MovementDirection.DOWN) 
+            entity.setMovementDirection(MovementDirection.LEFT);
+        else if (entity.getMovementDirection() == MovementDirection.LEFT)
+            entity.setMovementDirection(MovementDirection.UP);
+        else if (entity.getMovementDirection() == MovementDirection.UP)
+            entity.setMovementDirection(MovementDirection.RIGHT);
+        else if (entity.getMovementDirection() == MovementDirection.RIGHT)
+            entity.setMovementDirection(MovementDirection.DOWN);
     }
 
     @Override
     public void follow(Entity targetEntity, Entity entity, int error) {
         setFollowState(entity, targetEntity, error);
         if (fState != FollowState.ON_TARGET) {
-            entity.setMovimentDirection(nextFollowDirection(targetEntity, entity));
+            entity.setMovementDirection(nextFollowDirection(targetEntity, entity));
             move(entity);
         }
     }
