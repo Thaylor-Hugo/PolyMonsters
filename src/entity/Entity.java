@@ -100,7 +100,7 @@ public abstract class Entity {
      * Set the movement strategy for the entity
      * @param mvType a movement strategy to use
      * @param movementConst a constant used by strategy (what it does depend on strategy)
-     * @param keyH a key handler for controled movement
+     * @param keyH a key handler for controled movement (null for the rest)
      * @see MovementTypes
      */
     public void setMovementStrategy(MovementTypes mvType, int movementConst, KeyHandler keyH) {

@@ -5,13 +5,20 @@ import java.util.Random;
 import actions.movements.enums.MovementDirection;
 import entity.Entity;
 
+/**
+ * Class {@code MoveRandom} implements a movement strategy for randomly movement
+ */
 public class MoveRandom implements MovementStrategy {
     Random rand = new Random();
-    int bound;  // max quantity to move before changing directions
+    int bound;
     int totalMoved = 0;
     int totalToMove;
     FollowState fState = FollowState.ON_TARGET;
 
+    /**
+     * Create a new random movement strategy
+     * @param bound max quantity to move before changing directions
+     */
     public MoveRandom(int bound) {
         this.bound = bound;
         totalToMove = rand.nextInt(bound);
@@ -33,8 +40,11 @@ public class MoveRandom implements MovementStrategy {
         } 
     }
 
+    /**
+     * Randomly change entity direction
+     * @param entity to change direction 
+     */
     private void changeDirection(Entity entity) {
-        // Randomly change direction
         boolean directionChanged = false;
         int nexDirection;
         while (!directionChanged) {
@@ -68,16 +78,6 @@ public class MoveRandom implements MovementStrategy {
                     break;
             }
         }
-
-
-        if (entity.getMovementDirection() == MovementDirection.DOWN) 
-            entity.setMovementDirection(MovementDirection.LEFT);
-        else if (entity.getMovementDirection() == MovementDirection.LEFT)
-            entity.setMovementDirection(MovementDirection.UP);
-        else if (entity.getMovementDirection() == MovementDirection.UP)
-            entity.setMovementDirection(MovementDirection.RIGHT);
-        else if (entity.getMovementDirection() == MovementDirection.RIGHT)
-            entity.setMovementDirection(MovementDirection.DOWN);
     }
 
     @Override
@@ -89,6 +89,12 @@ public class MoveRandom implements MovementStrategy {
         }
     }
 
+    /**
+     * Set the follow state of the persecution
+     * @param entity that is following
+     * @param target that is being followed
+     * @param error diference in target and entity position that can be considered {@code ON_TARGET}
+     */
     private void setFollowState(Entity entity, Entity target, int error) {
         boolean tryX;   // if false, skips the followState == x (To follow like climbing a ladder)
         if (fState == FollowState.FOLLOW_X) tryX = true;
@@ -108,6 +114,12 @@ public class MoveRandom implements MovementStrategy {
         }
     }
 
+    /**
+     * Get the next entity direction based on follow state
+     * @param entity that is following
+     * @param target that is being followed
+     * @return entity next {@code MovementDirection}
+     */
     private MovementDirection nextFollowDirection(Entity entity, Entity target) {
         MovementDirection mvDirect;
         if (fState == FollowState.FOLLOW_X) {

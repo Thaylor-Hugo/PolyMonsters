@@ -3,11 +3,18 @@ package actions.movements;
 import actions.movements.enums.MovementDirection;
 import entity.Entity;
 
+/**
+ * Class {@code MoveUpDown} implements a movement strategy for movement in a vertical line <p>
+ */
 public class MoveUpDown implements MovementStrategy {
     int totalMoved = 0;
     int totalToMove;
     FollowState fState = FollowState.ON_TARGET;
 
+    /**
+     * Create a new UpDown movement strategy
+     * @param totalToMove vertical line size
+     */
     public MoveUpDown(int totalToMove) {
         this.totalToMove = totalToMove;
     }
@@ -25,6 +32,10 @@ public class MoveUpDown implements MovementStrategy {
         } 
     }
 
+    /**
+     * Change entity direction after reaching the line edge
+     * @param entity to change direction 
+     */
     private void changeDirection(Entity entity) {
         // Change the Movementdirection to next, forming a square
         if (entity.getMovementDirection() == MovementDirection.DOWN) 
@@ -43,6 +54,12 @@ public class MoveUpDown implements MovementStrategy {
         }
     }
 
+    /**
+     * Set the follow state of the persecution. Only follow verticaly
+     * @param entity that is following
+     * @param target that is being followed
+     * @param error diference in target and entity position that can be considered {@code ON_TARGET}
+     */
     private void setFollowState(Entity entity, Entity target, int error) {
         if ((entity.mapY > target.mapY + error || entity.mapY < target.mapY - error)) {
             fState = FollowState.FOLLOW_Y;
@@ -53,6 +70,12 @@ public class MoveUpDown implements MovementStrategy {
         }
     }
 
+    /**
+     * Get the next entity direction based on follow state.
+     * @param entity that is following
+     * @param target that is being followed
+     * @return entity next {@code MovementDirection}
+     */
     private MovementDirection nextFollowDirection(Entity entity, Entity target) {
         MovementDirection mvDirect;
         if (target.mapY < entity.mapY) mvDirect = MovementDirection.DOWN;    

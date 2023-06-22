@@ -3,15 +3,20 @@ package actions.movements;
 import actions.movements.enums.MovementDirection;
 import entity.Entity;
 
-// Move entity as if it was in a square side in clockWise
-// Entity start position is a corner o the square
-// Initial MovimentDirection defines the start of the moviment
-
+/**
+ * Class {@code MoveSquare} implements a movement strategy for movement as if it was in a square side in clockWise. <p>
+ * Entity start position is a corner of the square.
+ * Initial MovimentDirection defines the start of the moviment.
+ */
 public class MoveSquare implements MovementStrategy {
     int totalToMove;            // Square side length
     int totalMoved = 0;
     FollowState fState = FollowState.ON_TARGET;
 
+    /**
+     * Create a new square movement strategy
+     * @param totalToMove square size
+     */
     public MoveSquare(int totalToMove) {
         this.totalToMove = totalToMove;
     }
@@ -30,8 +35,11 @@ public class MoveSquare implements MovementStrategy {
         } 
     }
 
+    /**
+     * Change entity direction after reaching a corner of the square
+     * @param entity to change direction 
+     */
     private void changeDirection(Entity entity) {
-        // Change the Movementdirection to next, forming a square
         if (entity.getMovementDirection() == MovementDirection.DOWN) 
             entity.setMovementDirection(MovementDirection.LEFT);
         else if (entity.getMovementDirection() == MovementDirection.LEFT)
@@ -51,6 +59,12 @@ public class MoveSquare implements MovementStrategy {
         }
     }
 
+    /**
+     * Set the follow state of the persecution
+     * @param entity that is following
+     * @param target that is being followed
+     * @param error diference in target and entity position that can be considered {@code ON_TARGET}
+     */
     private void setFollowState(Entity entity, Entity target, int error) {
         boolean tryX;   // if false, skips the followState == x (To follow like climbing a ladder)
         if (fState == FollowState.FOLLOW_X) tryX = true;
@@ -70,6 +84,12 @@ public class MoveSquare implements MovementStrategy {
         }
     }
 
+    /**
+     * Get the next entity direction based on follow state
+     * @param entity that is following
+     * @param target that is being followed
+     * @return entity next {@code MovementDirection}
+     */
     private MovementDirection nextFollowDirection(Entity entity, Entity target) {
         MovementDirection mvDirect;
         if (fState == FollowState.FOLLOW_X) {

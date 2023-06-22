@@ -4,9 +4,16 @@ import actions.movements.enums.MovementDirection;
 import entity.Entity;
 import main.KeyHandler;
 
+/**
+ * Class {@code MoveControle} implements a movement strategy for movement controled by a keyboard 
+ */
 public class MoveControled implements MovementStrategy {
     KeyHandler keyH;
 
+    /**
+     * Create a new controled movement strategy
+     * @param keyH key handler that controls the keyboard inputs 
+     */
     public MoveControled(KeyHandler keyH) {
         this.keyH = keyH;
     }
@@ -36,6 +43,9 @@ public class MoveControled implements MovementStrategy {
         move(entity);
     }
 
+    /**
+     * Not used for controled strategy. Do nothing
+     */
     @Override
     public void setTotalToMove(int newTotalToMove) {
         // NOT USED FOR CONTROLED MOVEMENT
