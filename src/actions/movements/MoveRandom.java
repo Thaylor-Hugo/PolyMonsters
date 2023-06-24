@@ -28,18 +28,18 @@ public class MoveRandom implements MovementStrategy {
 
     @Override
     public void move(Entity entity) {
+        if (totalMoved >= totalToMove) {
+            totalToMove = rand.nextInt(bound);
+            totalMoved = 0;
+            changeDirection(entity);
+        } 
+
         entity.moving = true;
         if (entity.getMovementDirection() == MovementDirection.DOWN)       entity.mapY += entity.speed;
         else if (entity.getMovementDirection() == MovementDirection.UP)    entity.mapY -= entity.speed;
         else if (entity.getMovementDirection() == MovementDirection.RIGHT) entity.mapX += entity.speed;
         else if (entity.getMovementDirection() == MovementDirection.LEFT)  entity.mapX -= entity.speed;
         totalMoved += entity.speed;
-
-        if (totalMoved >= totalToMove) {
-            totalToMove = rand.nextInt(bound);
-            totalMoved = 0;
-            changeDirection(entity);
-        } 
     }
 
     /**
