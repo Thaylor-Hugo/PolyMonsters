@@ -25,9 +25,10 @@ public interface MovementStrategy {
      * Set a new constant used for the movement strategy.
      * Constant use varies with strategy
      * @param newTotalToMove new constant
+     * @throws IllegalArgumentException if newTotalToMove is not positive
      * @see MovementTypes
      */
-    public void setTotalToMove(int newTotalToMove);
+    public void setTotalToMove(int newTotalToMove) throws IllegalArgumentException;
 }
 
 /**

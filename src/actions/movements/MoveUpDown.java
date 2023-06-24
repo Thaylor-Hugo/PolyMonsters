@@ -14,8 +14,10 @@ public class MoveUpDown implements MovementStrategy {
     /**
      * Create a new UpDown movement strategy
      * @param totalToMove vertical line size
+     * @throws IllegalArgumentException if totalToMove is not positive or zero
      */
-    public MoveUpDown(int totalToMove) {
+    public MoveUpDown(int totalToMove) throws IllegalArgumentException {
+        if (totalToMove < 0) throw new IllegalArgumentException("Total to move can't be negative");
         this.totalToMove = totalToMove;
     }
 
@@ -84,7 +86,8 @@ public class MoveUpDown implements MovementStrategy {
     }
 
     @Override
-    public void setTotalToMove(int newTotalToMove) {
+    public void setTotalToMove(int newTotalToMove) throws IllegalArgumentException{
+        if (newTotalToMove < 0) throw new IllegalArgumentException("Total to move can't be negative");
         this.totalToMove = newTotalToMove;
     }
     

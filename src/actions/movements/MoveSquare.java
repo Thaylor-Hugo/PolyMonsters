@@ -16,8 +16,10 @@ public class MoveSquare implements MovementStrategy {
     /**
      * Create a new square movement strategy
      * @param totalToMove square size
+     * @throws IllegalArgumentException if totalToMove is not positive or zero
      */
-    public MoveSquare(int totalToMove) {
+    public MoveSquare(int totalToMove) throws IllegalArgumentException {
+        if (totalToMove < 0) throw new IllegalArgumentException("Total to move can't be negative");
         this.totalToMove = totalToMove;
     }
 
@@ -103,7 +105,8 @@ public class MoveSquare implements MovementStrategy {
     }
 
     @Override
-    public void setTotalToMove(int newTotalToMove) {
+    public void setTotalToMove(int newTotalToMove) throws IllegalArgumentException {
+        if (newTotalToMove < 0) throw new IllegalArgumentException("Total to move can't be negative");
         this.totalToMove = newTotalToMove;
     }
 }

@@ -18,8 +18,10 @@ public class MoveRandom implements MovementStrategy {
     /**
      * Create a new random movement strategy
      * @param bound max quantity to move before changing directions
+     * @throws IllegalArgumentException if bound is not positive
      */
-    public MoveRandom(int bound) {
+    public MoveRandom(int bound) throws IllegalArgumentException {
+        if (bound <= 0) throw new IllegalArgumentException("Bound can't be negative nor zero");
         this.bound = bound;
         totalToMove = rand.nextInt(bound);
     }
@@ -133,7 +135,8 @@ public class MoveRandom implements MovementStrategy {
     }
 
     @Override
-    public void setTotalToMove(int newBound) {
+    public void setTotalToMove(int newBound) throws IllegalArgumentException {
+        if (newBound < 0) throw new IllegalArgumentException("Total to move can't be negative");
         this.bound = newBound;
     }
     
