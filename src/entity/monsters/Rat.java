@@ -2,6 +2,8 @@ package entity.monsters;
 
 import javax.swing.ImageIcon;
 
+import actions.movements.enums.MovementDirection;
+import actions.movements.enums.MovementTypes;
 import main.GamePanel;
 
 public class Rat extends Monsters {
@@ -10,16 +12,8 @@ public class Rat extends Monsters {
     private static String rightPath = "resources/monsters/rats/rat_right.gif";
     private static String leftPath = "resources/monsters/rats/rat_left.gif";
     private static String battlePath = "resources/battle/rat.gif";
-    private static final int movingDown = 1;
-    private static final int movingUp = 2;
-    private static final int movingRight = 3;
-    private static final int movingLeft = 4;
-    private int movementDirection;
 
     final int tilesToMove = 5;
-    int totalMoved = 0;
-    boolean movingX = true;     // false means movingY
-    boolean forward = true;     // false means backwards
 
     public Rat(GamePanel gp, int mapX, int mapY) {
         this.gp = gp;
@@ -38,6 +32,8 @@ public class Rat extends Monsters {
         battleImage = new ImageIcon(battlePath).getImage();
         hp = 50;
         damage = 5;
+        mvDirect = MovementDirection.DOWN;
+        setMovementStrategy(MovementTypes.RANDOM, tilesToMove * gp.tileSize, null);
     }
 
     @Override
@@ -47,64 +43,26 @@ public class Rat extends Monsters {
 
     @Override
     public void update() {
-        // TODO better moviment strategy
-        int totalToMove = tilesToMove * gp.tileSize;
-        if (movingX) {
-            if (forward) {
-                mapX += speed;
-                movementDirection = movingRight;
-            }
-            else {
-                mapX -= speed;
-                movementDirection = movingLeft;
-            }
-            totalMoved += speed;
-            
-        } else {
-            if (forward) {
-                mapY += speed;
-                movementDirection = movingDown;
-            }
-            else {
-                mapY -= speed;
-                movementDirection = movingUp;
-            } 
-            totalMoved += speed;
-        }
-
-        if (totalMoved >= totalToMove) {
-            if (movingX && forward) {
-                movingX = false;
-            }else if (!movingX && forward) {
-                movingX = true;
-                forward = false;
-            }else if (movingX && !forward) {
-                movingX = false;
-            }else if (!movingX && !forward) {
-                movingX = true;
-                forward = true;
-            }
-            totalMoved = 0;
-        }
+        mvStrategy.move(this);
     }
 
     @Override
     protected String getEntityImagePath() {
         String imagePath;
-        switch (movementDirection) {
-            case movingDown:
+        switch (mvDirect) {
+            case DOWN:
                 imagePath = downPath;
                 break;
 
-            case movingLeft:
+            case LEFT:
                 imagePath = leftPath;
                 break;
 
-            case movingRight:
+            case RIGHT:
                 imagePath = rightPath;
                 break;
 
-            case movingUp:
+            case UP:
                 imagePath = upPath;
                 break;
 
@@ -114,5 +72,4 @@ public class Rat extends Monsters {
         }
         return imagePath;
     }
-    
 }

@@ -2,6 +2,8 @@ package entity.monsters;
 
 import javax.swing.ImageIcon;
 
+import actions.movements.enums.MovementDirection;
+import actions.movements.enums.MovementTypes;
 import main.GamePanel;
 
 public class Goblin extends Monsters {
@@ -9,13 +11,8 @@ public class Goblin extends Monsters {
     private static String downPath = "resources/monsters/goblins/small/down.gif";
     private static String upPath = "resources/monsters/goblins/small/up.gif";
     private static String battlePath = "resources/monsters/goblins/small/down.gif";
-    private static final int movingDown = 1;
-    private static final int movingUp = 2;
-    private int movementDirection;
 
     final int tilesToMove = 5;
-    int totalMoved = 0;
-    boolean forward = true;     // false means backwards
 
     public Goblin(GamePanel gp, int mapX, int mapY) {
         this.gp = gp;
@@ -34,6 +31,8 @@ public class Goblin extends Monsters {
         battleImage = new ImageIcon(battlePath).getImage();
         hp = 100;
         damage = 10;
+        mvDirect = MovementDirection.DOWN;
+        setMovementStrategy(MovementTypes.UP_DOWN, tilesToMove * gp.tileSize, null);
     }
 
     @Override
@@ -43,35 +42,18 @@ public class Goblin extends Monsters {
 
     @Override
     public void update() {
-        // TODO better moviment strategy
-        int totalToMove = tilesToMove * gp.tileSize;
-
-        if (forward) {
-            mapY += speed;
-            movementDirection = movingDown;
-        }
-        else {
-            mapY -= speed;
-            movementDirection = movingUp;
-        } 
-        totalMoved += speed;
-
-        if (totalMoved >= totalToMove) {
-            if (forward) forward = false;
-            else forward = true;
-            totalMoved = 0;
-        }
+        mvStrategy.move(this);
     }
 
     @Override
     protected String getEntityImagePath() {
         String imagePath;
-        switch (movementDirection) {
-            case movingDown:
+        switch (mvDirect) {
+            case DOWN:
                 imagePath = downPath;
                 break;
 
-            case movingUp:
+            case UP:
                 imagePath = upPath;
                 break;
 
@@ -81,5 +63,4 @@ public class Goblin extends Monsters {
         }
         return imagePath;
     }
-    
 }

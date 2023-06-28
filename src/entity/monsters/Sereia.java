@@ -4,6 +4,8 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import actions.movements.enums.MovementDirection;
+import actions.movements.enums.MovementTypes;
 import main.GamePanel;
 
 public class Sereia extends Monsters {
@@ -16,17 +18,9 @@ public class Sereia extends Monsters {
     private static String battlePath = "left.gif";
     private final String finalRightPath;
     private final String finalLeftPath;
-    private static final int movingDown = 1;
-    private static final int movingUp = 2;
-    private static final int movingRight = 3;
-    private static final int movingLeft = 4;
-    private int movementDirection;
     private boolean pink; // if false, its a green mermaid
 
     final int tilesToMove = 5;
-    int totalMoved = 0;
-    boolean movingX = true;     // false means movingY
-    boolean forward = true;     // false means backwards
 
     public Sereia(GamePanel gp, int mapX, int mapY) {
         this.gp = gp;
@@ -56,6 +50,8 @@ public class Sereia extends Monsters {
         } else battleImage = new ImageIcon(basicPath + greenPath + battlePath).getImage();
         hp = 150;
         damage = 15;
+        mvDirect = MovementDirection.DOWN;
+        setMovementStrategy(MovementTypes.SQUARE, tilesToMove * gp.tileSize, null);
     }
 
     @Override
@@ -65,64 +61,26 @@ public class Sereia extends Monsters {
 
     @Override
     public void update() {
-        // TODO better moviment strategy
-        int totalToMove = tilesToMove * gp.tileSize;
-        if (movingX) {
-            if (forward) {
-                mapX += speed;
-                movementDirection = movingRight;
-            }
-            else {
-                mapX -= speed;
-                movementDirection = movingLeft;
-            }
-            totalMoved += speed;
-            
-        } else {
-            if (forward) {
-                mapY += speed;
-                movementDirection = movingDown;
-            }
-            else {
-                mapY -= speed;
-                movementDirection = movingUp;
-            } 
-            totalMoved += speed;
-        }
-
-        if (totalMoved >= totalToMove) {
-            if (movingX && forward) {
-                movingX = false;
-            }else if (!movingX && forward) {
-                movingX = true;
-                forward = false;
-            }else if (movingX && !forward) {
-                movingX = false;
-            }else if (!movingX && !forward) {
-                movingX = true;
-                forward = true;
-            }
-            totalMoved = 0;
-        }
+        mvStrategy.move(this);
     }
 
     @Override
     protected String getEntityImagePath() {
         String imagePath;
-        switch (movementDirection) {
-            case movingDown:
+        switch (mvDirect) {
+            case DOWN:
                 imagePath = finalLeftPath;
                 break;
 
-            case movingLeft:
+            case LEFT:
                 imagePath = finalLeftPath;
                 break;
 
-            case movingRight:
+            case RIGHT:
                 imagePath = finalRightPath;
                 break;
 
-            case movingUp:
+            case UP:
                 imagePath = finalRightPath;
                 break;
 
@@ -132,5 +90,4 @@ public class Sereia extends Monsters {
         }
         return imagePath;
     }
-    
 }

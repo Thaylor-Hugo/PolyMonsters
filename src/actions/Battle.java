@@ -250,13 +250,13 @@ public class Battle {
                 if(keyH.interrectPressed) {
                     Random rand = new Random();
                     if (chargedPosition <= chargedGoal + chargedRange && chargedPosition >= chargedGoal - chargedRange) {
-                        damageDealt = player.damage * rand.nextDouble(1, 3);
+                        damageDealt = player.damage * (rand.nextDouble() * 2 + 1); // between 1 and 3
                         battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
                     } else if (chargedPosition <= chargedGoal + 2*chargedRange && chargedPosition >= chargedGoal - 2*chargedRange) {
-                        damageDealt = player.damage * rand.nextDouble(1);
+                        damageDealt = player.damage * rand.nextDouble();
                         battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
@@ -308,9 +308,9 @@ public class Battle {
             Random rand = new Random();
             chargedAtack = true;
             chargedGoal = rand.nextInt(gp.tileSize*6);
-            chargedRange = rand.nextInt(5, gp.tileSize);
+            chargedRange = rand.nextInt(gp.tileSize - 5) + 5;
             chargedPosition = rand.nextInt(gp.tileSize*6);
-            chargedSpeed = rand.nextInt(1, 6);
+            chargedSpeed = rand.nextInt(5) + 1;
         }
         if (currentOption == 2) {
             // Itens
