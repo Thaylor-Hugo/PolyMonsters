@@ -72,18 +72,15 @@ public class Player extends Entity {
     @Override
     public void update() {
         if (keyH.sprintPressed) {
-            if (!sprinting) {
-                sprinting = true;
-                speed += 2;
-            }
-        } else {
-            if (sprinting) {
-                sprinting = false;
-                speed -= 2;
-            }
-        }
+            sprinting = true;
+            speed += 2;
+        } else sprinting = false;
+        
         mvStrategy.move(this);
         setLastSafePosition();
+        if (sprinting) {
+            speed -= 2;
+        }
     }
 
     @Override
