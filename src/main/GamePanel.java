@@ -18,6 +18,8 @@ import entity.monsters.Monsters;
 import entity.monsters.Rat;
 import entity.monsters.Sereia;
 import entity.monsters.Zombie;
+import menus.Menu;
+import menus.MenuInicial;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -55,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyHandler keyH = new KeyHandler();
 
-    Menu menu = new Menu(this, keyH);
+    Menu menu = new MenuInicial(this, keyH);
 
     Thread gameThread;
     
