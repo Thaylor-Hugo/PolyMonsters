@@ -42,7 +42,8 @@ public class Player extends Entity {
     private int lastSafeX;
     private int lastSafeY;
     private int inventoryOption;
-    private ItemTypes []inventiryOptions = {ItemTypes.CEREAL_BAR, ItemTypes.FRUIT, ItemTypes.GINGERBREAD};
+    private ItemTypes []inventiryOptions = {ItemTypes.GINGERBREAD, ItemTypes.CEREAL_BAR, ItemTypes.FRUIT};
+    private Buff buff;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -73,6 +74,7 @@ public class Player extends Entity {
         damage = 10;
         setMovementStrategy(MovementTypes.CONTROLED, 0, keyH);
         setInventory();
+        buff = new Buff(speed, damage);
     }
     
     private void setInventory() {
@@ -94,6 +96,7 @@ public class Player extends Entity {
     
     @Override
     public void update() {
+        speed = buff.getSpeed();
         if (gp.showInventory) {
             updateInventary();
             moving = false;
@@ -189,8 +192,18 @@ public class Player extends Entity {
             if(inventoryOption < 0) inventoryOption += 3;
         } else if (keyH.interrectPressed) {
             keyH.interrectPressed = false;
-            if (!inventory.get(inventiryOptions[inventoryOption]).isEmpty())
-                inventory.get(inventiryOptions[inventoryOption]).remove(0).use(this);
+            if (!inventory.get(inventiryOptions[inventoryOption]).isEmpty()) {
+                if (inventiryOptions[inventoryOption] == ItemTypes.GINGERBREAD && !buff.damageBuffOn) {
+                    inventory.get(inventiryOptions[inventoryOption]).remove(0).use(this);
+                } else
+                if (inventiryOptions[inventoryOption] == ItemTypes.CEREAL_BAR && !buff.speedBuffOn) {
+                    inventory.get(inventiryOptions[inventoryOption]).remove(0).use(this);
+                } else 
+                if (inventiryOptions[inventoryOption] == ItemTypes.FRUIT && hp != getRefHp()) {
+                    inventory.get(inventiryOptions[inventoryOption]).remove(0).use(this);
+                }
+                
+            }
         }
     }
     
@@ -237,5 +250,17 @@ public class Player extends Entity {
         g2.drawImage(Item.getItemImage(ItemTypes.GINGERBREAD), gp.tileSize*3 + gp.tileSize/2, gp.screenHeight - gp.tileSize*9/2 + gp.tileSize/2, gp.tileSize * 2, gp.tileSize * 2, null);
         g2.drawImage(Item.getItemImage(ItemTypes.CEREAL_BAR), gp.tileSize*13/2 + gp.tileSize/2, gp.screenHeight - gp.tileSize*9/2 + gp.tileSize/2, gp.tileSize * 2, gp.tileSize * 2, null);
         g2.drawImage(Item.getItemImage(ItemTypes.FRUIT), gp.tileSize*10 + gp.tileSize/2, gp.screenHeight - gp.tileSize*9/2 + gp.tileSize/2, gp.tileSize * 2, gp.tileSize * 2, null);
+    }
+
+    public double getDamage() {
+        return buff.getDamage();
+    }
+
+    public void activateDamageBuff() {
+        buff.activateDamageBuff();
+    }
+
+    public void activateSpeedBuff() {
+        buff.activateSpeedBuff();
     }
 }

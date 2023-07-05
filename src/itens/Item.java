@@ -22,10 +22,10 @@ public class Item {
     public void use(Player player) {
         switch (item) {
             case GINGERBREAD:
-                player.damage += 1;
+                player.activateDamageBuff();
                 break;
             case CEREAL_BAR:
-                player.speed += 1;
+                player.activateSpeedBuff();
                 break;
             case FRUIT:
                 player.hp = player.getRefHp();
