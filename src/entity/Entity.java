@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,7 @@ import actions.movements.MovementStrategy;
 import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import itens.Item;
+import itens.ItemTypes;
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -32,7 +34,7 @@ public abstract class Entity {
     protected GamePanel gp;
     public int hp;              // valor de hp que entidade possui no momento
     public int damage;
-    protected Map<Item, Integer> inventory;
+    protected Map<ItemTypes, ArrayList<Item>> inventory;
 
     /**
      * Set instance variables to defalt values
