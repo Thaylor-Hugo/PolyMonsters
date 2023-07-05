@@ -39,9 +39,9 @@ public class Backpack extends Object {
         if (!inRange()) return;
         if (opened) return;
         if (keyH.interrectPressed) {
+            player.loot(inventory);
             inventory.clear();
             opened = true;
-            player.loot(inventory);
         }
     }
 
