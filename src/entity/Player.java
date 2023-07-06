@@ -174,6 +174,7 @@ public class Player extends Entity {
 
     public void loot(Map <ItemTypes, ArrayList<Item>> loot) {
         for (ItemTypes itemTypes : inventiryOptions) {
+            if (loot.get(itemTypes) == null) continue;
             inventory.get(itemTypes).addAll(loot.get(itemTypes));
         }
     }
