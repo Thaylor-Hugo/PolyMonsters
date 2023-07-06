@@ -81,6 +81,7 @@ public class Battle {
         // Content
         drawBattleDisplay(g2);
         drawOptions(g2);
+        if (gp.showInventory) player.drawInventary(g2);
     }
 
     private void drawLifeBar(Graphics2D g2, int hp, int refHp, int x, int y) {
@@ -244,26 +245,30 @@ public class Battle {
     }
 
     public void update() {
+        if (gp.showInventory) {
+            player.updateInventary();
+            return;
+        }
         if (!inBattle) inBattle();
         if (inBattle) {
             if (chargedAtack) {
                 if(keyH.interrectPressed) {
                     Random rand = new Random();
                     if (chargedPosition <= chargedGoal + chargedRange && chargedPosition >= chargedGoal - chargedRange) {
-                        damageDealt = player.damage * (rand.nextDouble() * 2 + 1); // between 1 and 3
+                        damageDealt = player.getDamage() * (rand.nextDouble() * 2 + 1); // between 1 and 3
                         battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
                     } else if (chargedPosition <= chargedGoal + 2*chargedRange && chargedPosition >= chargedGoal - 2*chargedRange) {
-                        damageDealt = player.damage * rand.nextDouble();
+                        damageDealt = player.getDamage() * rand.nextDouble();
                         battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
                     } else {
-                        battleMonster.hp -= player.damage;
-                        damageDealt = player.damage;
+                        damageDealt = player.getDamage();
+                        battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
@@ -298,8 +303,8 @@ public class Battle {
     private void playerAction() {
         if (currentOption == 0) {
             // Normal atack
-            battleMonster.hp -= player.damage;
-            damageDealt = player.damage;
+            damageDealt = player.getDamage();
+            battleMonster.hp -= damageDealt;
             wasDamageDealt = true;
             playerTurn = false;
         }
@@ -313,7 +318,7 @@ public class Battle {
             chargedSpeed = rand.nextInt(5) + 1;
         }
         if (currentOption == 2) {
-            // Itens
+            gp.showInventory = true;
         }
         if (currentOption == 3) {
             // Run away
