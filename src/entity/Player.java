@@ -30,8 +30,11 @@ public class Player extends Entity {
     public boolean sprinting;
     public boolean moving;
     public int movementDirection;
+    public boolean nearBike;
+    public boolean onBike;
+    public long lastInteraction = System.nanoTime();
 
-    public Player(GamePanel gp, KeyHandler keyH) {
+    public Player(GamePanel gp, KeyHandler keyH) { //TODO implementar Singleton
         setDefaltValues();
         getPlayerImage(sprinting, movementDirection);
         this.gp = gp;
@@ -89,6 +92,8 @@ public class Player extends Entity {
         sprinting = false;
         moving = false;
         movementDirection = movingDown;
+        onBike = false;
+        nearBike = false;
     }
     
     @Override
@@ -113,15 +118,69 @@ public class Player extends Entity {
         } else if (keyH.upPressed) {
             y -= finalSpeed;
             movementDirection = movingUp;
-        } else {
+        } 
+        
+        else if (keyH.interactPressed && this.onBike) {
+        	double delta = System.nanoTime() - this.lastInteraction;
+        	System.out.println("DELTA INTERACTION DISMOUNT "+delta);
+        	this.lastInteraction = System.nanoTime();
+        	if(delta>1E8) {
+                this.onBike = false;
+        	}
+        } 
+        else if (keyH.interactPressed && this.nearBike) {
+        	double delta = System.nanoTime() - this.lastInteraction;
+        	System.out.println("DELTA INTERACTION MOUNT "+delta);
+        	this.lastInteraction = System.nanoTime();
+        	if(delta>1E8) {
+                this.onBike = true;
+        	}
+        } 
+        
+        else {
             moving = false;
         }
     }
 
     @Override
     public void draw(Graphics2D g2) {
-        getPlayerImage(sprinting, movementDirection);
-        g2.drawImage(entityImage, x, y, gp.tileSize, gp.tileSize, null);
+    	if(this.onBike) {
+    		
+    	}
+    	else {
+    		getPlayerImage(sprinting, movementDirection);
+            g2.drawImage(entityImage, x, y, gp.tileSize, gp.tileSize, null);
+    	}
+        
     }
+    
+    
+
+	@Override
+	public String toString() {
+		return "Player [keyH=" + keyH + "\nsprinting=" + sprinting + "\nmoving=" + moving
+				+ "\n movementDirection=" + movementDirection + "\nnearBike=" + nearBike + "\nonBike=" + onBike + "\nx="
+				+ x + "\ny=" + y + "\nspeed=" + speed + "]";
+	}
+
+	public boolean isNearBike() {
+		return nearBike;
+	}
+
+	public void setNearBike(boolean nearBike) {
+		this.nearBike = nearBike;
+	}
+
+	public boolean isOnBike() {
+		return onBike;
+	}
+
+	public void setOnBike(boolean onBike) {
+		this.onBike = onBike;
+	}
+    
+    
+    
+    
     
 }
