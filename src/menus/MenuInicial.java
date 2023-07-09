@@ -33,7 +33,7 @@ public class MenuInicial extends Menu{
 	@Override
 	protected void action(){
 		if(currentOption == 0) {
-				gp.setGameState();
+				gp.setGameState(MenuOptions.ESCOLHERJOGADOR);
 			}
 			if(currentOption == 1) {
 				//carrega o jogo
@@ -56,16 +56,5 @@ public class MenuInicial extends Menu{
 		if(currentOption == 1)g.drawImage(player, (gp.screenWidth/2) - 163, 408, 48, 48, null);
 		if(currentOption == 2)g.drawImage(player, (gp.screenWidth/2) - 128, 456, 48, 48, null);
 	}
-
-	/*@Override
-	public void render(Graphics g) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'render'");
-	}
-	*/
-
-
-
-
     
 }
