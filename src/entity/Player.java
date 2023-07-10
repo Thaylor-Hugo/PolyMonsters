@@ -29,6 +29,14 @@ public class Player extends Entity {
     private static String sprintingLeftPath = "resources/player/movement/sprinting_left.gif";
     private static String battlePath = "resources/battle/player.gif";
 
+    private static String walkingDownPath2 = "resources/monsters/zombies/mostAlive/down.gif";
+    private static String walkingUpPath2 = "resources/monsters/zombies/mostAlive/up.gif";
+    private static String walkingRightPath2 = "resources/monsters/zombies/mostAlive/right.gif";
+    private static String walkingLeftPath2 = "resources/monsters/zombies/mostAlive/left.gif";
+
+    private boolean player2 = false;
+
+
     //player position related to the screen
     public final int screenX;
     public final int screenY;
@@ -44,6 +52,10 @@ public class Player extends Entity {
     private int inventoryOption;
     private ItemTypes []inventiryOptions = {ItemTypes.GINGERBREAD, ItemTypes.CEREAL_BAR, ItemTypes.FRUIT};
     private Buff buff;
+
+    public void setAsPlayer2(){
+        player2 =  true;
+    }
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -129,27 +141,32 @@ public class Player extends Entity {
         String imagePath;
         switch (mvDirect) {
             case DOWN:
-                if (sprinting) imagePath = sprintingDownPath;
+                if(player2) imagePath = walkingDownPath2;
+                else if (sprinting) imagePath = sprintingDownPath;
                 else imagePath = walkingDownPath;   
                 break;
 
             case LEFT:
-                if (sprinting) imagePath = sprintingLeftPath;
+                if(player2) imagePath = walkingLeftPath2;
+                else if (sprinting) imagePath = sprintingLeftPath;
                 else imagePath = walkingLeftPath;
                 break;
 
             case RIGHT:
-                if (sprinting) imagePath = sprintingRightPath;
+                if(player2) imagePath = walkingRightPath2;
+                else if (sprinting) imagePath = sprintingRightPath;
                 else imagePath = walkingRightPath;
                 break;
 
             case UP:
-                if (sprinting) imagePath = sprintingUpPath; 
+                if(player2) imagePath = walkingUpPath2;
+                else if (sprinting) imagePath = sprintingUpPath; 
                 else imagePath = walkingUpPath; 
                 break;
 
             default:
-                if (sprinting) imagePath = sprintingDownPath;
+                if(player2) imagePath = walkingDownPath2;
+                else if (sprinting) imagePath = sprintingDownPath;
                 else imagePath = walkingDownPath;
                 break;
         }
