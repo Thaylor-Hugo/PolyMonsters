@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -18,7 +20,12 @@ import entity.monsters.Monsters;
 import entity.monsters.Rat;
 import entity.monsters.Sereia;
 import entity.monsters.Zombie;
+import entity.npcs.Npc;
+import entity.objects.Backpack;
 import tile.TileManager;
+import entity.objects.Object;
+import itens.Item;
+import itens.ItemTypes;
 
 public class GamePanel extends JPanel implements Runnable {
     
@@ -43,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     int gameState = MENU;
+    public boolean showInventory = false;
 
     public void setGameState() {
         if (gameState == MENU) {
@@ -61,9 +69,23 @@ public class GamePanel extends JPanel implements Runnable {
     
     Player player = new Player(this, keyH);
     ArrayList<Monsters> monsters = new ArrayList<>();
+    ArrayList<Object> objects = new ArrayList<>();
+    ArrayList<Item> cereal = new ArrayList<>();
+    ArrayList<Item> ginger = new ArrayList<>();
+    ArrayList<Item> fruit = new ArrayList<>();
+    Map<ItemTypes, ArrayList<Item>> backpackContent = new HashMap<>();
     Battle battle = new Battle(monsters, player, this, keyH);
+    ArrayList<Npc> npcs = new ArrayList<>();
 
     public GamePanel() {
+        for (int i = 0; i < 10; i++) {
+            cereal.add(new Item(ItemTypes.CEREAL_BAR));
+            ginger.add(new Item(ItemTypes.FRUIT));
+            fruit.add(new Item(ItemTypes.GINGERBREAD));
+        }
+        backpackContent.put(ItemTypes.CEREAL_BAR, cereal);
+        backpackContent.put(ItemTypes.FRUIT, fruit);
+        backpackContent.put(ItemTypes.GINGERBREAD, ginger);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.LIGHT_GRAY);
         this.setDoubleBuffered(true);
@@ -74,16 +96,28 @@ public class GamePanel extends JPanel implements Runnable {
             Random rand = new Random();
             if (i < 10) {
                 monsters.add(new Ghost(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
             } else if (i < 20) {
                 monsters.add(new Goblin(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
             } else if (i < 30) {
                 monsters.add(new Golem(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
             } else if (i < 40) {
                 monsters.add(new Rat(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
             } else if(i < 50) {
                 monsters.add(new Sereia(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
             } else if (i < 60) {
                 monsters.add(new Zombie(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
             }
         }
     }
@@ -112,6 +146,10 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 // What actually happens in the loop in each FPS update 
+                if (keyH.inventoryPressed) {
+                    showInventory = !showInventory;
+                    keyH.inventoryPressed = false;
+                }
                 update();
                 repaint();
                 delta--;
@@ -130,9 +168,9 @@ public class GamePanel extends JPanel implements Runnable {
                 battle.update();
                 if (!battle.inBattle) {
                     player.update();        
-                    for (Monsters monster : monsters) {
-                        monster.update();
-                    }
+                    for (Monsters monster : monsters) monster.update();
+                    for (Object object : objects) object.update();
+                    for (Npc npc : npcs) npc.update();
                 }
             }
         }
@@ -150,9 +188,9 @@ public class GamePanel extends JPanel implements Runnable {
             if (battle.inBattle) battle.draw(g2);
             else {
                 tileM.draw(g2); //needs to be called first to no overlay Player
-                for (Monsters monster : monsters) {
-                    monster.draw(g2);
-                }
+                for (Monsters monster : monsters) monster.draw(g2);
+                for (Object object : objects) object.draw(g2);
+                for (Npc npc : npcs) npc.draw(g2);
                 player.draw(g2);
             }
         }
