@@ -20,7 +20,7 @@ public class MenuPersonagens extends Menu{
 
 		// atualizar os personagens depois
 		this.jogador = player;
-		options = new String [] {"Escolher Personagem 1","Escolher Personagem 2"} ; 
+		options = new String [] {"Personagem 1","Personagem 2"} ; 
 		currentOption = 0;
 		maxOption = options.length - 1;
 
@@ -45,11 +45,11 @@ public class MenuPersonagens extends Menu{
 	@Override
 	protected void action(){
 		if(currentOption == 0) {  //aqui deve-se direcionar para tela do Menu
-				gp.setGameState(MenuOptions.ESCOLHERAMBIENTE);
+				gp.setGameState(MenuOptions.ESCOLHERDIFICULDADE);
 			}
 			if(currentOption == 1) {
 				jogador.setAsPlayer2();
-				gp.setGameState(MenuOptions.ESCOLHERAMBIENTE);
+				gp.setGameState(MenuOptions.ESCOLHERDIFICULDADE);
 			}
 	}
 
