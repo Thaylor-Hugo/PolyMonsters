@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints.Key;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,8 +19,14 @@ import entity.monsters.Monsters;
 import entity.monsters.Rat;
 import entity.monsters.Sereia;
 import entity.monsters.Zombie;
+import menus.Dificuldades;
 import menus.Menu;
+import menus.MenuAmbiente;
+import menus.MenuDificuldade;
 import menus.MenuInicial;
+import menus.MenuOptions;
+import menus.MenuPause;
+import menus.MenuPersonagens;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -42,28 +49,38 @@ public class GamePanel extends JPanel implements Runnable {
     public final int mapWidth = tileSize*maxMapCol;
     public final int mapHeight = tileSize*maxMapRow;
 
+    KeyHandler keyH = new KeyHandler();
+    Player player = new Player(this, keyH);
+    int currentMenu = 0;
+    boolean terror = false;
+    private final Menu menu[] = {new MenuInicial(this, keyH), new MenuPersonagens(this, keyH, player), 
+    new MenuDificuldade(this, keyH), new MenuAmbiente(this, keyH), new MenuPause(this, keyH)};
+
     int FPS = 60;
 
-    int gameState = MENU;
+    MenuOptions gameState = MenuOptions.INICIAL;
 
-    public void setGameState() {
-        if (gameState == MENU) {
-            gameState = PLAYING;
-        } else {
-            gameState = MENU;
-        };
+    public void setGameState(MenuOptions opcao) {
+        gameState = opcao;
+        if(opcao == MenuOptions.INICIAL){
+            currentMenu = 0;
+        }else if(opcao == MenuOptions.ESCOLHERJOGADOR){
+            currentMenu = 1; 
+        }else if(opcao == MenuOptions.ESCOLHERDIFICULDADE){
+            currentMenu = 2;
+        }else if (opcao == MenuOptions.ESCOLHERAMBIENTE){
+            currentMenu = 3;
+        }else if(opcao == MenuOptions.PAUSE){
+            currentMenu = 4;
+        }
     }
     TileManager tileM = new TileManager(this);
 
-    KeyHandler keyH = new KeyHandler();
-
-    Menu menu = new MenuInicial(this, keyH);
-
     Thread gameThread;
     
-    Player player = new Player(this, keyH);
     ArrayList<Monsters> monsters = new ArrayList<>();
     Battle battle = new Battle(monsters, player, this, keyH);
+    private Dificuldades dificuldade;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -123,11 +140,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         // Update the information on screen, as such player position
-        if (gameState == MENU) {
-            menu.tick();
+        if (gameState != MenuOptions.JOGANDO) {
+            menu[currentMenu].tick();
         } else {
             if (keyH.pausePressed) {
-                gameState = MENU;
+                setGameState(MenuOptions.PAUSE);
             } else {
                 battle.update();
                 if (!battle.inBattle) {
@@ -146,8 +163,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
         
-        if (gameState == MENU) {
-            menu.render(g);
+        if (gameState != MenuOptions.JOGANDO) {
+            menu[currentMenu].render(g);
         } else {
             if (battle.inBattle) battle.draw(g2);
             else {
@@ -168,6 +185,14 @@ public class GamePanel extends JPanel implements Runnable {
     
     public TileManager getTileM() {
         return tileM;
+    }
+
+    public void setDificult(Dificuldades dificuldade) {
+        this.dificuldade = dificuldade;
+    }
+
+    public void setAmbiente(boolean b) {
+        terror = b;
     }
 
 }
