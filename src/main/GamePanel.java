@@ -66,7 +66,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
 
-    int gameState = MENU;
     public boolean showInventory = false;
 
     MenuOptions gameState = MenuOptions.INICIAL;
