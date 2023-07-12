@@ -39,12 +39,15 @@ public class Battle {
     private int damageTakenTime = 0;
     private double damageDealt = 0;    // Value of the damage
     private int damageTaken = 0;
+    
+    private Sound sound = new Sound(getClass().getResource("/music/battle.wav"));
 
     public Battle(ArrayList<Monsters> monsters, Player player, GamePanel gp, KeyHandler keyH) {
         this.monsters = monsters;
         this.player = player;
         this.gp = gp;
         this.keyH = keyH;
+        sound.setVolume(-20f);
     }
 
     public boolean inBattle() {
@@ -251,6 +254,7 @@ public class Battle {
         }
         if (!inBattle) inBattle();
         if (inBattle) {
+            if (!sound.isRunning()) sound.play();
             if (chargedAtack) {
                 if(keyH.interrectPressed) {
                     Random rand = new Random();
