@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import actions.Sound;
 import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import entity.Player;
@@ -69,6 +70,7 @@ public class Zombie extends Monsters {
         }
         mvDirect = MovementDirection.DOWN;
         setMovementStrategy(MovementTypes.RANDOM, tilesToMove * gp.tileSize, null);
+        sound = new Sound(getClass().getResource("/music/zombie.wav"));
     }
 
     @Override
@@ -78,6 +80,7 @@ public class Zombie extends Monsters {
 
     @Override
     public void update() {
+        playSound();
         if (inFollowRange()) mvStrategy.follow(player, this, gp.tileSize);
         else mvStrategy.move(this);
     }
