@@ -27,6 +27,8 @@ import menus.MenuInicial;
 import menus.MenuOptions;
 import menus.MenuPause;
 import menus.MenuPersonagens;
+import state.DifficultyState;
+import state.EasyState;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -80,9 +82,14 @@ public class GamePanel extends JPanel implements Runnable {
     
     ArrayList<Monsters> monsters = new ArrayList<>();
     Battle battle = new Battle(monsters, player, this, keyH);
-    private Dificuldades dificuldade;
+
+    private DifficultyState dificuldade;
+    //private Dificuldades dificuldade;
 
     public GamePanel() {
+
+        dificuldade = new EasyState();
+
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.LIGHT_GRAY);
         this.setDoubleBuffered(true);
@@ -186,10 +193,16 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManager getTileM() {
         return tileM;
     }
-
-    public void setDificult(Dificuldades dificuldade) {
-        this.dificuldade = dificuldade;
+    public void setDifficultyState(DifficultyState state) {
+        dificuldade = state;
     }
+    
+    public void playGame() {
+        dificuldade.play();
+    }
+    /*public void setDificult(Dificuldades dificuldade) {
+        this.dificuldade = dificuldade;
+     }*/
 
     public void setAmbiente(boolean b) {
         terror = b;

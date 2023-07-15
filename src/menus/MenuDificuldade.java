@@ -9,6 +9,9 @@ import java.awt.Color;
 import java.awt.Font;
 import main.GamePanel;
 import main.KeyHandler;
+import state.EasyState;
+import state.MediumState;
+import state.HardState;
 
 public class MenuDificuldade extends Menu {
 
@@ -34,15 +37,22 @@ public class MenuDificuldade extends Menu {
     protected void action() {
         if(currentOption == 0) {
             gp.setGameState(MenuOptions.ESCOLHERAMBIENTE);
-            gp.setDificult(Dificuldades.FACIL);
+			gp.setDifficultyState(new EasyState());
+			gp.playGame();
+            //gp.setDifficultyState(Dificuldades.FACIL);
         }
         if(currentOption == 1) {
-             gp.setGameState(MenuOptions.ESCOLHERAMBIENTE);
-              gp.setDificult(Dificuldades.MEDIO);
+            gp.setGameState(MenuOptions.ESCOLHERAMBIENTE);
+			gp.setDifficultyState(new MediumState());
+			gp.playGame();
+
+              //gp.setDificult(Dificuldades.MEDIO);
         }
         if(currentOption == 2) {
              gp.setGameState(MenuOptions.ESCOLHERAMBIENTE);
-              gp.setDificult(Dificuldades.DIFICIL);
+			 gp.setDifficultyState(new HardState());
+			 gp.playGame();
+              //gp.setDificult(Dificuldades.DIFICIL);
         }
     }
 
