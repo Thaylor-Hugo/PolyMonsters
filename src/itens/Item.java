@@ -9,6 +9,9 @@ import javax.imageio.ImageIO;
 import actions.Sound;
 import entity.Player;
 
+/**
+ * Class that represent a usable {@code Item}
+ */
 public class Item {
     ItemTypes item;
     private Sound sound = new Sound(getClass().getResource("/music/useItem.wav"));

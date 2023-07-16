@@ -6,6 +6,9 @@ import java.awt.Graphics2D;
 import actions.Sound;
 import entity.Entity;
 
+/**
+ * Class represents a hostile monster
+ */
 public abstract class Monsters extends Entity {
     public int visionRange; // Range to start a battle
     Sound sound;
@@ -22,6 +25,9 @@ public abstract class Monsters extends Entity {
         g2.fillOval(centerX-visionRange, centerY-visionRange, visionRange*2, visionRange*2);
     }
 
+    /**
+     * Play the monster sound. Volume is defined by distance to player
+     */
     protected void playSound() {
         int distanceX = (mapX + (gp.tileSize / 2)) - (gp.getPlayer().mapX + (gp.tileSize / 2));
         int distanceY = (mapY + (gp.tileSize / 2)) - (gp.getPlayer().mapY + (gp.tileSize / 2));

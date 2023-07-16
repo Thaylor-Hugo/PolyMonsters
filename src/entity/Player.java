@@ -17,6 +17,9 @@ import itens.ItemTypes;
 import main.GamePanel;
 import main.KeyHandler;
 
+/**
+ * Game {@code Player}
+ */
 public class Player extends Entity {
 
     private static String walkingDownPath = "resources/player/movement/walking_down.gif";
@@ -53,6 +56,9 @@ public class Player extends Entity {
     private ItemTypes []inventiryOptions = {ItemTypes.GINGERBREAD, ItemTypes.CEREAL_BAR, ItemTypes.FRUIT};
     private Buff buff;
 
+    /**
+     * Set player image as a zombie
+     */
     public void setAsPlayer2(){
         player2 =  true;
     }
@@ -89,6 +95,9 @@ public class Player extends Entity {
         buff = new Buff(speed, damage);
     }
     
+    /**
+     * Set a initial inventory
+     */
     private void setInventory() {
         inventory = new HashMap<>();
         inventory.put(ItemTypes.CEREAL_BAR, new ArrayList<>());
@@ -174,11 +183,17 @@ public class Player extends Entity {
         return imagePath;
     }
 
+    /**
+     * Set player on their last safe position
+     */
     public void setOnLastSafePosition() {
         mapX = lastSafeX;
         mapY = lastSafeY;
     }
 
+    /**
+     * Define the player last position
+     */
     private void setLastSafePosition() {
         if (Math.abs(mapX - posibleSafeX) >= safeDistance) {
             lastSafeX = posibleSafeX;
@@ -190,6 +205,10 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Loot a backpack content
+     * @param loot Content being looted
+     */
     public void loot(Map <ItemTypes, ArrayList<Item>> loot) {
         for (ItemTypes itemTypes : inventiryOptions) {
             if (loot.get(itemTypes) == null) continue;
@@ -271,22 +290,43 @@ public class Player extends Entity {
         g2.drawImage(Item.getItemImage(ItemTypes.FRUIT), gp.tileSize*10 + gp.tileSize/2, gp.screenHeight - gp.tileSize*9/2 + gp.tileSize/2, gp.tileSize * 2, gp.tileSize * 2, null);
     }
 
+    /**
+     * Get player damage
+     * @return Damage
+     */
     public double getDamage() {
         return buff.getDamage();
     }
 
+    /**
+     * Activate a damage buff
+     */
     public void activateDamageBuff() {
         buff.activateDamageBuff();
     }
 
+    /**
+     * Activate a speed buff
+     */
     public void activateSpeedBuff() {
         buff.activateSpeedBuff();
     }
 
+    /**
+     * Draw damage animation
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     * @param screenX Player x position
+     * @param screenY Player y position
+     * @param tileSize Game panel tile size
+     * @param inBattle If player is in battle
+     */
     public void drawBuff(Graphics2D g2, int screenX, int screenY, int tileSize, boolean inBattle) {
         buff.draw(g2, screenX, screenY, tileSize, inBattle);
     }
 
+    /**
+     * Cure the player
+     */
     public void activateHpCure() {
         hp = getRefHp();
         buff.activateHpCure();

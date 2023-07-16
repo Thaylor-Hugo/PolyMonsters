@@ -5,6 +5,9 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+/**
+ * A entity {@code Buff} that controls the speed and damage buffs and animations 
+ */
 public class Buff {
     int baseSpeed, baseDamage;
     int speedBuffTime = 60 * 60; // 1 minute
@@ -28,6 +31,10 @@ public class Buff {
         hpCureImage = new ImageIcon("resources/buff/health.gif", null).getImage();
     }
 
+    /**
+     * Get the buff damage
+     * @return Damage
+     */
     public double getDamage() {
         int finalDamage = baseDamage;
         if (damageBuffOn) {
@@ -41,6 +48,10 @@ public class Buff {
         return finalDamage;
     }
 
+    /**
+     * Get teh buff speed
+     * @return Speed
+     */
     public int getSpeed() {
         int finalSpeed = baseSpeed;
         if (speedBuffOn) {
@@ -54,14 +65,23 @@ public class Buff {
         return finalSpeed;
     }
 
+    /**
+     * Activate a damage buff
+     */
     public void activateDamageBuff() {
         damageBuffOn = true;
     }
-
+    
+    /**
+     * Activate a speed buff
+     */
     public void activateSpeedBuff() {
         speedBuffOn = true;
     }
-
+    
+    /**
+     * Draw the buff animation
+     */
     public void draw(Graphics2D g2, int x, int y, int tileSize, boolean inBattle) {
         if (damageBuffOn && inBattle) {
             g2.drawImage(damageImage, x, y, tileSize, tileSize, null);
@@ -79,6 +99,9 @@ public class Buff {
         }
     }
 
+    /**
+     * Activate a hp cure
+     */
     public void activateHpCure() {
         hpCureBuffOn = true;
     }
