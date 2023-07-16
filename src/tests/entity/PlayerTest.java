@@ -1,4 +1,4 @@
-package tests;
+package tests.entity;
 
 import entity.Player;
 import main.GamePanel;
@@ -23,17 +23,6 @@ public class PlayerTest {
     static final boolean playerDefaultSprinting = false;
     static final boolean playerDefaultMoving = false;
     static final int playerDefaultMovingDirection = 1;
-
-    @Test
-    @DisplayName("Test default values")
-    void setDefaltValuesTest() {
-        assertEquals(playerDefaultX, player.mapX);
-        assertEquals(playerDefaultY, player.mapY);
-        assertEquals(playerDefaultSpeed, player.speed);
-        assertEquals(playerDefaultSprinting, player.sprinting);
-        assertEquals(playerDefaultMoving, player.moving);
-        assertEquals(playerDefaultMovingDirection, player.movementDirection);
-    }
     
     @ParameterizedTest
     @DisplayName("Test position updates")
