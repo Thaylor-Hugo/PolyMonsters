@@ -6,10 +6,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import actions.Sound;
 import entity.Player;
 
 public class Item {
     ItemTypes item;
+    private Sound sound = new Sound(getClass().getResource("/music/useItem.wav"));
     
     public Item(ItemTypes item) {
         this.item = item;
@@ -20,6 +22,7 @@ public class Item {
      * @param entity that is going to receive the item effect
      */
     public void use(Player player) {
+        sound.play();
         switch (item) {
             case GINGERBREAD:
                 player.activateDamageBuff();
