@@ -1,6 +1,7 @@
 package entity.monsters;
 
 import javax.swing.ImageIcon;
+import java.awt.Rectangle;
 
 import actions.Sound;
 import actions.movements.enums.MovementDirection;
@@ -32,6 +33,7 @@ public class Ghost extends Monsters {
         mvDirect = MovementDirection.DOWN;
         setMovementStrategy(MovementTypes.SQUARE, tilesToMove * gp.tileSize, null);
         sound = new Sound(getClass().getResource("/music/ghost.wav"));
+        collisionArea = new Rectangle (0,0,0,0);
     }
 
     @Override
