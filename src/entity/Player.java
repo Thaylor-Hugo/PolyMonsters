@@ -295,7 +295,7 @@ public class Player extends Entity {
      * Get player damage
      * @return Damage
      */
-    public double getDamage() {
+    public int getDamage() {
         return buff.getDamage();
     }
 

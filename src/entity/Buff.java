@@ -35,7 +35,7 @@ public class Buff {
      * Get the buff damage
      * @return Damage
      */
-    public double getDamage() {
+    public int getDamage() {
         int finalDamage = baseDamage;
         if (damageBuffOn) {
             finalDamage += 5;
