@@ -113,6 +113,7 @@ public class Battle {
     
         // Cenario
         g2.drawImage(player.battleImage, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, gp.tileSize * 3, null);
+        player.drawBuff(g2, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, inBattle);
         g2.drawImage(battleMonster.battleImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
         drawLifeBar(g2, player.hp, player.getRefHp(), gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize);
         drawLifeBar(g2, battleMonster.hp, battleMonster.getRefHp(), gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2);

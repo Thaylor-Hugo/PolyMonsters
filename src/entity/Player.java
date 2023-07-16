@@ -130,6 +130,7 @@ public class Player extends Entity {
     public void draw(Graphics2D g2) {
         entityImage = getEntityImage();
         g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        drawBuff(g2, screenX, screenY, gp.tileSize, false);
         if (gp.showInventory) {
             updateInventary();
             drawInventary(g2);
@@ -280,5 +281,14 @@ public class Player extends Entity {
 
     public void activateSpeedBuff() {
         buff.activateSpeedBuff();
+    }
+
+    public void drawBuff(Graphics2D g2, int screenX, int screenY, int tileSize, boolean inBattle) {
+        buff.draw(g2, screenX, screenY, tileSize, inBattle);
+    }
+
+    public void activateHpCure() {
+        hp = getRefHp();
+        buff.activateHpCure();
     }
 }

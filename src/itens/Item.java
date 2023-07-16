@@ -28,7 +28,7 @@ public class Item {
                 player.activateSpeedBuff();
                 break;
             case FRUIT:
-                player.hp = player.getRefHp();
+                player.activateHpCure();
                 break;
         }
     }
