@@ -47,9 +47,9 @@ public class MenuAmbiente extends Menu {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 48));
 		g.drawString("PolyMonsters", (gp.screenWidth/2) - 100, 100);
 		g.drawString("Aventura", (gp.screenWidth/2) - 50, 400);
-		g.drawString("Terror", (gp.screenWidth/2) - 75, 448);
-		if(currentOption == 0)g.drawImage(player, (gp.screenWidth/2) - 138, 360, 48, 48, null);
-		if(currentOption == 1)g.drawImage(player, (gp.screenWidth/2) - 163, 408, 48, 48, null);
+		g.drawString("Terror", (gp.screenWidth/2) - 50, 448);
+		if(currentOption == 0)g.drawImage(player, (gp.screenWidth/2) - 100, 360, 48, 48, null);
+		if(currentOption == 1)g.drawImage(player, (gp.screenWidth/2) - 100, 408, 48, 48, null);
     }
     
 }
