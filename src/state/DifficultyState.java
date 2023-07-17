@@ -1,9 +1,6 @@
 package state;
 
 public interface DifficultyState {
-    int hp = 200;
-    int damage  = 50;
-    int speed = 50;
 
     public void play();
 

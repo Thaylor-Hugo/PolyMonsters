@@ -2,8 +2,8 @@ package state;
 
 public class EasyState implements DifficultyState {
     int hp = 200;
-    int damage  = 50;
-    int speed = 50;
+    int damage  = 30;
+    int speed = 3;
 
     @Override
     public void play() {

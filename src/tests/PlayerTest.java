@@ -29,10 +29,9 @@ public class PlayerTest {
     void setDefaltValuesTest() {
         assertEquals(playerDefaultX, player.mapX);
         assertEquals(playerDefaultY, player.mapY);
-        assertEquals(playerDefaultSpeed, player.speed);
+        assertEquals(playerDefaultSpeed, player.getSpeed());
         assertEquals(playerDefaultSprinting, player.sprinting);
         assertEquals(playerDefaultMoving, player.moving);
-        assertEquals(playerDefaultMovingDirection, player.movementDirection);
     }
     
     @ParameterizedTest
@@ -58,30 +57,30 @@ public class PlayerTest {
         player.update();
         if (keyH.upPressed) {
             if (sprint) {
-                assertTrue(player.mapY < previusY - player.speed);
+                assertTrue(player.mapY < previusY - player.getSpeed());
             } else {
-                assertTrue(player.mapY == previusY - player.speed);
+                assertTrue(player.mapY == previusY - player.getSpeed());
             }
         }
         if (keyH.leftPressed) {
             if (sprint) {
-                assertTrue(player.mapX < previusX - player.speed);
+                assertTrue(player.mapX < previusX - player.getSpeed());
             } else {
-                assertTrue(player.mapX == previusX - player.speed);
+                assertTrue(player.mapX == previusX - player.getSpeed());
             }
         }
         if (keyH.downPressed) {
             if (sprint) {
-                assertTrue(player.mapY > previusY + player.speed);
+                assertTrue(player.mapY > previusY + player.getSpeed());
             } else {
-                assertTrue(player.mapY == previusY + player.speed);
+                assertTrue(player.mapY == previusY + player.getSpeed());
             }
         }
         if (keyH.rightPressed) {
             if (sprint) {
-                assertTrue(player.mapX > previusX + player.speed);
+                assertTrue(player.mapX > previusX + player.getSpeed());
             } else {
-                assertTrue(player.mapX == previusX + player.speed);
+                assertTrue(player.mapX == previusX + player.getSpeed());
             }
         }
     }

@@ -35,11 +35,11 @@ public class MoveRandom implements MovementStrategy {
         } 
 
         entity.moving = true;
-        if (entity.getMovementDirection() == MovementDirection.DOWN)       entity.mapY += entity.speed;
-        else if (entity.getMovementDirection() == MovementDirection.UP)    entity.mapY -= entity.speed;
-        else if (entity.getMovementDirection() == MovementDirection.RIGHT) entity.mapX += entity.speed;
-        else if (entity.getMovementDirection() == MovementDirection.LEFT)  entity.mapX -= entity.speed;
-        totalMoved += entity.speed;
+        if (entity.getMovementDirection() == MovementDirection.DOWN)       entity.mapY += entity.getSpeed();
+        else if (entity.getMovementDirection() == MovementDirection.UP)    entity.mapY -= entity.getSpeed();
+        else if (entity.getMovementDirection() == MovementDirection.RIGHT) entity.mapX += entity.getSpeed();
+        else if (entity.getMovementDirection() == MovementDirection.LEFT)  entity.mapX -= entity.getSpeed();
+        totalMoved += entity.getSpeed();
     }
 
     /**

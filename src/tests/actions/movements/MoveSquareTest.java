@@ -36,7 +36,7 @@ public class MoveSquareTest {
         MovementDirection initialDirection = MovementDirection.DOWN;
         int initialX = rand.nextInt(10000);
         int initialY = rand.nextInt(10000);
-        int error = entity.speed;
+        int error = entity.getSpeed();
         entity.mapX = initialX;
         entity.mapY = initialY;
         entity.setMovementDirection(initialDirection);
@@ -85,7 +85,7 @@ public class MoveSquareTest {
         // 10000 bound to avoid overflow
         int initialX = rand.nextInt(10000);
         int initialY = rand.nextInt(10000);
-        int error = entity.speed;
+        int error = entity.getSpeed();
         entity.mapX = initialX;
         entity.mapY = initialY;
         MovementDirection initialDirection = MovementDirection.DOWN;

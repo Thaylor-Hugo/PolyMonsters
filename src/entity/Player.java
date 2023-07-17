@@ -125,13 +125,13 @@ public class Player extends Entity {
     public void update() {
         if (keyH.sprintPressed) {
             sprinting = true;
-            speed += 2;
+            dificuldade.setSpeed(dificuldade.getSpeed() + 2);
         } else sprinting = false;
         
         mvStrategy.move(this);
         setLastSafePosition();
         if (sprinting) {
-            speed -= 2;
+            dificuldade.setSpeed(dificuldade.getSpeed() - 2);
         }
     }
 

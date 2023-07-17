@@ -3,8 +3,8 @@ package state;
 public class HardState implements DifficultyState {
 
     int hp = 100;
-    int damage  = 70;
-    int speed = 70;
+    int damage  = 10;
+    int speed = 1;
 
     @Override
     public void play() {
@@ -37,7 +37,7 @@ public class HardState implements DifficultyState {
 
     @Override
     public int getRefHp() {
-        return 200;
+        return 100;
     }
      
 }
