@@ -10,6 +10,10 @@ import itens.ItemTypes;
 import main.GamePanel;
 import main.KeyHandler;
 
+/**
+ * A {@code Backpack} with several itens that can be looted
+ * @see Item 
+ */
 public class Backpack extends Object {
     private boolean opened;
     private int color;

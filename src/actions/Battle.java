@@ -12,6 +12,9 @@ import entity.monsters.Monsters;
 import main.GamePanel;
 import main.KeyHandler;
 
+/**
+ * Class {@code Battle} represents a batlle between a Player and a Monster
+ */
 public class Battle {
     public boolean inBattle;
     Player player;
@@ -39,14 +42,21 @@ public class Battle {
     private int damageTakenTime = 0;
     private double damageDealt = 0;    // Value of the damage
     private int damageTaken = 0;
+    
+    private Sound sound = new Sound(getClass().getResource("/music/battle.wav"));
 
     public Battle(ArrayList<Monsters> monsters, Player player, GamePanel gp, KeyHandler keyH) {
         this.monsters = monsters;
         this.player = player;
         this.gp = gp;
         this.keyH = keyH;
+        sound.setVolume(-20f);
     }
 
+    /**
+     * Checks if the player is in battle if a monster
+     * @return the battle state
+     */
     public boolean inBattle() {
         Random rand = new Random();
         for (Monsters monster : monsters) {
@@ -62,6 +72,11 @@ public class Battle {
         return inBattle;
     }
 
+    /**
+     * Checks if player is inside the monster battle range
+     * @param monster Monster to check 
+     * @return if player is in battle range
+     */
     private boolean inBattleRange(Monsters monster) {
         int monsterDistanceX = (monster.mapX + (gp.tileSize / 2)) - (player.mapX + (gp.tileSize / 2));
         int monsterDistanceY = (monster.mapY + (gp.tileSize / 2)) - (player.mapY + (gp.tileSize / 2));
@@ -73,6 +88,10 @@ public class Battle {
         return false;
     }
 
+    /**
+     * Draw the battle
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     */
     public void draw(Graphics2D g2) {
         // Background Color
         g2.setColor(new Color(31, 38, 8));
@@ -84,6 +103,14 @@ public class Battle {
         if (gp.showInventory) player.drawInventary(g2);
     }
 
+    /**
+     * Draw a life bar for entities in battle
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     * @param hp Current entity hp
+     * @param refHp Entity 100% hp reference
+     * @param x Screen x position
+     * @param y Screen y position
+     */
     private void drawLifeBar(Graphics2D g2, int hp, int refHp, int x, int y) {
         int lifeBarWidth = gp.tileSize * 3 * hp / refHp;
         g2.setColor(Color.RED);
@@ -94,6 +121,10 @@ public class Battle {
         g2.drawRect(x, y, gp.tileSize * 3, gp.tileSize / 5);
     }
 
+    /**
+     * Draw a display of the battle
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     */
     private void drawBattleDisplay(Graphics2D g2) {
         // Display window with the battle view
         g2.setColor(new Color(207,229,228));
@@ -110,6 +141,7 @@ public class Battle {
     
         // Cenario
         g2.drawImage(player.battleImage, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, gp.tileSize * 3, null);
+        player.drawBuff(g2, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, inBattle);
         g2.drawImage(battleMonster.battleImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
         drawLifeBar(g2, player.hp, player.getRefHp(), gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize);
         drawLifeBar(g2, battleMonster.hp, battleMonster.getRefHp(), gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2);
@@ -119,6 +151,14 @@ public class Battle {
         if (chargedAtack) drawChargedAtack(g2);
     }
 
+    /**
+     * Draw damage taken for the player and the damage dealt on monster
+     * @param g2
+     * @param damageTakenX
+     * @param damageTakenY
+     * @param damageDealtX
+     * @param damageDealtY
+     */
     private void drawDamage(Graphics2D g2, int damageTakenX, int damageTakenY, int damageDealtX, int damageDealtY) {
         if (wasDamageDealt) {
             damageDealtOnDisplay = true;
@@ -144,6 +184,10 @@ public class Battle {
 
     }
 
+    /**
+     * Draw charge attack bar
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     */
     private void drawChargedAtack(Graphics2D g2) {
         int positionOrigin = gp.tileSize * 8;
         int barWidth = gp.tileSize * 6;
@@ -193,6 +237,9 @@ public class Battle {
         g2.fillRect(chargedPosition + positionOrigin, gp.screenHeight/2 - gp.tileSize / 5, 5, 3 * gp.tileSize / 5);
     }
 
+    /**
+     * Update charge attack bar
+     */
     private void updateChargedPosition() {
         if (chargedPosition >= gp.tileSize*6) {
             chargedForward = false;
@@ -210,6 +257,10 @@ public class Battle {
         }    
     }
 
+    /**
+     * Draw player battle options
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     */
     private void drawOptions(Graphics2D g2) {
         // Draw the player options in a battle
 
@@ -244,6 +295,9 @@ public class Battle {
  
     }
 
+    /**
+     * Update battle, such as selected option, current atack, etc.
+     */
     public void update() {
         if (gp.showInventory) {
             player.updateInventary();
@@ -251,6 +305,7 @@ public class Battle {
         }
         if (!inBattle) inBattle();
         if (inBattle) {
+            if (!sound.isRunning()) sound.play();
             if (chargedAtack) {
                 if(keyH.interrectPressed) {
                     Random rand = new Random();
@@ -300,6 +355,9 @@ public class Battle {
         }
     }
 
+    /**
+     * Activate the player chosen options
+     */
     private void playerAction() {
         if (currentOption == 0) {
             // Normal atack
@@ -339,6 +397,9 @@ public class Battle {
         keyH.interrectPressed = false;
     }
 
+    /**
+     * Change selected option based on key pressed
+     */
     private void choseOption() {
         if(keyH.downPressed) {
             currentOption += 2;

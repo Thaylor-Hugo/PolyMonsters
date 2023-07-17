@@ -4,12 +4,19 @@ import entity.Entity;
 import entity.Player;
 import main.KeyHandler;
 
+/**
+ * Represent a interrectable object in the game world
+ */
 public abstract class Object extends Entity {
     int interrectRange;
     boolean inInterection;
     Player player;
     KeyHandler keyH;
 
+    /**
+     * Check if player is close enough to interrect with object
+     * @return If player is inside interrection range
+     */
     protected boolean inRange() {
         int distanceX = (mapX + (gp.tileSize / 2)) - (player.mapX + (gp.tileSize / 2));
         int distanceY = (mapY + (gp.tileSize / 2)) - (player.mapY + (gp.tileSize / 2));

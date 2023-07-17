@@ -12,6 +12,9 @@ import entity.Player;
 import main.GamePanel;
 import main.KeyHandler;
 
+/**
+ * Represents a not playable character {@code Npc}
+ */
 public class Npc extends Entity {
     private static final String basicPath = "resources/npcs/npc";
     private static final String downPath = "/down.gif";
@@ -48,6 +51,10 @@ public class Npc extends Entity {
         this.mapY = mapY;
     }
 
+    /**
+     * Checks if player is close enough to npc to talk if them
+     * @return If player is inside npc talk range
+     */
     protected boolean inRange() {
         int distanceX = (mapX + (gp.tileSize / 2)) - (player.mapX + (gp.tileSize / 2));
         int distanceY = (mapY + (gp.tileSize / 2)) - (player.mapY + (gp.tileSize / 2));
@@ -82,6 +89,10 @@ public class Npc extends Entity {
         } else if(npcMoves && !talking) mvStrategy.move(this);
     }
 
+    /**
+     * Npc start talking
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     */
     private void talk(Graphics2D g2) {
         if (talkingTime == 0) message = dialog[rand.nextInt(dialog.length)];
         int screenX = mapX - gp.getPlayer().mapX + gp.getPlayer().screenX;

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import actions.Sound;
 import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import main.GamePanel;
@@ -52,6 +53,7 @@ public class Sereia extends Monsters {
         damage = 15;
         mvDirect = MovementDirection.DOWN;
         setMovementStrategy(MovementTypes.SQUARE, tilesToMove * gp.tileSize, null);
+        sound = new Sound(getClass().getResource("/music/swim.wav"));
     }
 
     @Override
@@ -61,6 +63,7 @@ public class Sereia extends Monsters {
 
     @Override
     public void update() {
+        playSound();
         mvStrategy.move(this);
     }
 

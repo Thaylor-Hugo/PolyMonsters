@@ -17,6 +17,9 @@ import itens.ItemTypes;
 import main.GamePanel;
 import main.KeyHandler;
 
+/**
+ * Game {@code Player}
+ */
 public class Player extends Entity {
 
     private static String walkingDownPath = "resources/player/movement/walking_down.gif";
@@ -34,7 +37,7 @@ public class Player extends Entity {
     private static String walkingRightPath2 = "resources/monsters/zombies/mostAlive/right.gif";
     private static String walkingLeftPath2 = "resources/monsters/zombies/mostAlive/left.gif";
 
-    private boolean player2 = false;
+    private boolean alternativePlayer = false;
 
 
     //player position related to the screen
@@ -53,8 +56,12 @@ public class Player extends Entity {
     private ItemTypes []inventiryOptions = {ItemTypes.GINGERBREAD, ItemTypes.CEREAL_BAR, ItemTypes.FRUIT};
     private Buff buff;
 
-    public void setAsPlayer2(){
-        player2 =  true;
+    /**
+     * Set player image as player 2
+     * @param alternative If true, player is a zombie, otherwise if false
+     */
+    public void setAsAlternativePlayer(boolean alternative){
+        alternativePlayer =  alternative;
     }
 
     public Player(GamePanel gp, KeyHandler keyH) {
@@ -89,6 +96,9 @@ public class Player extends Entity {
         buff = new Buff(speed, damage);
     }
     
+    /**
+     * Set a initial inventory
+     */
     private void setInventory() {
         inventory = new HashMap<>();
         inventory.put(ItemTypes.CEREAL_BAR, new ArrayList<>());
@@ -130,6 +140,7 @@ public class Player extends Entity {
     public void draw(Graphics2D g2) {
         entityImage = getEntityImage();
         g2.drawImage(entityImage, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        drawBuff(g2, screenX, screenY, gp.tileSize, false);
         if (gp.showInventory) {
             updateInventary();
             drawInventary(g2);
@@ -141,31 +152,31 @@ public class Player extends Entity {
         String imagePath;
         switch (mvDirect) {
             case DOWN:
-                if(player2) imagePath = walkingDownPath2;
+                if(alternativePlayer) imagePath = walkingDownPath2;
                 else if (sprinting) imagePath = sprintingDownPath;
                 else imagePath = walkingDownPath;   
                 break;
 
             case LEFT:
-                if(player2) imagePath = walkingLeftPath2;
+                if(alternativePlayer) imagePath = walkingLeftPath2;
                 else if (sprinting) imagePath = sprintingLeftPath;
                 else imagePath = walkingLeftPath;
                 break;
 
             case RIGHT:
-                if(player2) imagePath = walkingRightPath2;
+                if(alternativePlayer) imagePath = walkingRightPath2;
                 else if (sprinting) imagePath = sprintingRightPath;
                 else imagePath = walkingRightPath;
                 break;
 
             case UP:
-                if(player2) imagePath = walkingUpPath2;
+                if(alternativePlayer) imagePath = walkingUpPath2;
                 else if (sprinting) imagePath = sprintingUpPath; 
                 else imagePath = walkingUpPath; 
                 break;
 
             default:
-                if(player2) imagePath = walkingDownPath2;
+                if(alternativePlayer) imagePath = walkingDownPath2;
                 else if (sprinting) imagePath = sprintingDownPath;
                 else imagePath = walkingDownPath;
                 break;
@@ -173,11 +184,17 @@ public class Player extends Entity {
         return imagePath;
     }
 
+    /**
+     * Set player on their last safe position
+     */
     public void setOnLastSafePosition() {
         mapX = lastSafeX;
         mapY = lastSafeY;
     }
 
+    /**
+     * Define the player last position
+     */
     private void setLastSafePosition() {
         if (Math.abs(mapX - posibleSafeX) >= safeDistance) {
             lastSafeX = posibleSafeX;
@@ -189,6 +206,10 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Loot a backpack content
+     * @param loot Content being looted
+     */
     public void loot(Map <ItemTypes, ArrayList<Item>> loot) {
         for (ItemTypes itemTypes : inventiryOptions) {
             if (loot.get(itemTypes) == null) continue;
@@ -270,15 +291,45 @@ public class Player extends Entity {
         g2.drawImage(Item.getItemImage(ItemTypes.FRUIT), gp.tileSize*10 + gp.tileSize/2, gp.screenHeight - gp.tileSize*9/2 + gp.tileSize/2, gp.tileSize * 2, gp.tileSize * 2, null);
     }
 
-    public double getDamage() {
+    /**
+     * Get player damage
+     * @return Damage
+     */
+    public int getDamage() {
         return buff.getDamage();
     }
 
+    /**
+     * Activate a damage buff
+     */
     public void activateDamageBuff() {
         buff.activateDamageBuff();
     }
 
+    /**
+     * Activate a speed buff
+     */
     public void activateSpeedBuff() {
         buff.activateSpeedBuff();
+    }
+
+    /**
+     * Draw damage animation
+     * @param g2 {@code Graphics2D} from {@code GamePanel paintComponent} method 
+     * @param screenX Player x position
+     * @param screenY Player y position
+     * @param tileSize Game panel tile size
+     * @param inBattle If player is in battle
+     */
+    public void drawBuff(Graphics2D g2, int screenX, int screenY, int tileSize, boolean inBattle) {
+        buff.draw(g2, screenX, screenY, tileSize, inBattle);
+    }
+
+    /**
+     * Cure the player
+     */
+    public void activateHpCure() {
+        hp = getRefHp();
+        buff.activateHpCure();
     }
 }

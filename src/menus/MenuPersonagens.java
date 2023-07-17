@@ -46,9 +46,10 @@ public class MenuPersonagens extends Menu{
 	protected void action(){
 		if(currentOption == 0) {  //aqui deve-se direcionar para tela do Menu
 				gp.setGameState(MenuOptions.ESCOLHERDIFICULDADE);
+				jogador.setAsAlternativePlayer(false);
 			}
 			if(currentOption == 1) {
-				jogador.setAsPlayer2();
+				jogador.setAsAlternativePlayer(true);
 				gp.setGameState(MenuOptions.ESCOLHERDIFICULDADE);
 			}
 	}

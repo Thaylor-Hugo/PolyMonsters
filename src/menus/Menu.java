@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import main.GamePanel;
 import main.KeyHandler;
 
+/** Create a game manu */
 public abstract class Menu {
 	
 	protected String[] options;
@@ -18,7 +19,9 @@ public abstract class Menu {
 	GamePanel gp;
 	KeyHandler keyH;
 
-	
+	/**
+	 * Change the selected option based on keyboard input
+	 */
 	public void tick() {
 		if(keyH.downPressed) {
 			currentOption++;
@@ -38,8 +41,16 @@ public abstract class Menu {
 			action();
 		}
 	}
+
+	/**
+	 * Realize the chosen action
+	 */
 	protected abstract void action();
 		
+	/**
+	 * Draw the menu on screen
+	 * @param g {@code Graphics} from {@code GamePanel paintComponent} method 
+	 */
 	public abstract void render(Graphics g);
 		
 }
