@@ -46,9 +46,10 @@ public class MenuPersonagens extends Menu{
 	protected void action(){
 		if(currentOption == 0) {  //aqui deve-se direcionar para tela do Menu
 				gp.setGameState(MenuOptions.ESCOLHERDIFICULDADE);
+				jogador.setAsAlternativePlayer(false);
 			}
 			if(currentOption == 1) {
-				jogador.setAsPlayer2();
+				jogador.setAsAlternativePlayer(true);
 				gp.setGameState(MenuOptions.ESCOLHERDIFICULDADE);
 			}
 	}
@@ -59,16 +60,16 @@ public class MenuPersonagens extends Menu{
 		g.setColor(new Color(0,0,0));
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 48));
 		g.drawString("PolyMonsters", (gp.screenWidth/2) - 100, 100);
-		g.drawString(options[0], (gp.screenWidth/2) - 50, 400);
-		g.drawString(options[1], (gp.screenWidth/2) - 75, 448);
+		g.drawString(options[0], (gp.screenWidth/2) - 100, 400);
+		g.drawString(options[1], (gp.screenWidth/2) - 100, 448);
 		if(currentOption == 0){
 			setJogadorImage(jogador_1);
-			g.drawImage(player, (gp.screenWidth/2) - 138, 360, 48, 48, null);
+			g.drawImage(player, (gp.screenWidth/2) - 150, 360, 48, 48, null);
 
 		}
 		if(currentOption == 1){
 			setJogadorImage(jogador_2);
-			g.drawImage(player, (gp.screenWidth/2) - 163, 408, 48, 48, null);
+			g.drawImage(player, (gp.screenWidth/2) - 150, 408, 48, 48, null);
 		}
 	}
     

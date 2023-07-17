@@ -2,6 +2,7 @@ package entity.monsters;
 
 import javax.swing.ImageIcon;
 
+import actions.Sound;
 import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import main.GamePanel;
@@ -33,6 +34,7 @@ public class Golem extends Monsters {
         damage = 30;
         mvDirect = MovementDirection.DOWN;
         setMovementStrategy(MovementTypes.UP_DOWN, tilesToMove * gp.tileSize, null);
+        sound = new Sound(getClass().getResource("/music/rocks.wav"));
     }
 
     @Override
@@ -42,6 +44,7 @@ public class Golem extends Monsters {
 
     @Override
     public void update() {
+        playSound();
         mvStrategy.move(this);
     }
 

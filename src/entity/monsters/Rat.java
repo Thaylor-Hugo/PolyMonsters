@@ -2,6 +2,7 @@ package entity.monsters;
 
 import javax.swing.ImageIcon;
 
+import actions.Sound;
 import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import main.GamePanel;
@@ -34,6 +35,7 @@ public class Rat extends Monsters {
         damage = 5;
         mvDirect = MovementDirection.DOWN;
         setMovementStrategy(MovementTypes.RANDOM, tilesToMove * gp.tileSize, null);
+        sound = new Sound(getClass().getResource("/music/mouse.wav"));
     }
 
     @Override
@@ -43,6 +45,7 @@ public class Rat extends Monsters {
 
     @Override
     public void update() {
+        playSound();
         mvStrategy.move(this);
     }
 

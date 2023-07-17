@@ -67,11 +67,11 @@ public class MenuDificuldade extends Menu {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 48));
 		g.drawString("PolyMonsters", (gp.screenWidth/2) - 100, 100);
 		g.drawString("Facil", (gp.screenWidth/2) - 50, 400);
-		g.drawString("Medio", (gp.screenWidth/2) - 75, 448);
-		g.drawString("Dificil", (gp.screenWidth/2) - 40, 496);
-		if(currentOption == 0)g.drawImage(player, (gp.screenWidth/2) - 138, 360, 48, 48, null);
-		if(currentOption == 1)g.drawImage(player, (gp.screenWidth/2) - 163, 408, 48, 48, null);
-		if(currentOption == 2)g.drawImage(player, (gp.screenWidth/2) - 128, 456, 48, 48, null);
+		g.drawString("Medio", (gp.screenWidth/2) - 50, 448);
+		g.drawString("Dificil", (gp.screenWidth/2) - 50, 496);
+		if(currentOption == 0)g.drawImage(player, (gp.screenWidth/2) - 100, 360, 48, 48, null);
+		if(currentOption == 1)g.drawImage(player, (gp.screenWidth/2) - 100, 408, 48, 48, null);
+		if(currentOption == 2)g.drawImage(player, (gp.screenWidth/2) - 100, 456, 48, 48, null);
     }
     
 }

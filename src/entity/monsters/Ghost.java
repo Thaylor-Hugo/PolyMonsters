@@ -2,6 +2,7 @@ package entity.monsters;
 
 import javax.swing.ImageIcon;
 
+import actions.Sound;
 import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import main.GamePanel;
@@ -30,6 +31,7 @@ public class Ghost extends Monsters {
         damage = 20;
         mvDirect = MovementDirection.DOWN;
         setMovementStrategy(MovementTypes.SQUARE, tilesToMove * gp.tileSize, null);
+        sound = new Sound(getClass().getResource("/music/ghost.wav"));
     }
 
     @Override
@@ -39,6 +41,7 @@ public class Ghost extends Monsters {
 
     @Override
     public void update() {
+        playSound();
         mvStrategy.move(this);
     }
 
