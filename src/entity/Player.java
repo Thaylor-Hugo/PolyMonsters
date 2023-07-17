@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,14 +78,16 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - gp.tileSize/2;
         screenY = gp.screenHeight/2 - gp.tileSize/2;
 
+        collisionArea = new Rectangle(8, 16, 32, 32);
+
         setDefaltValues();
         safeDistance = gp.tileSize * 5;
     }
     
     @Override
     protected void setDefaltValues() {
-        mapX = gp.tileSize*36;     //position related to the world map
-        mapY = gp.tileSize*84/2;
+        mapX = gp.tileSize*38;     //position related to the world map
+        mapY = gp.tileSize*86/2;
         speed = 2;
         sprinting = false;
         moving = false;

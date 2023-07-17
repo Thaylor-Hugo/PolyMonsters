@@ -21,18 +21,27 @@ public class MoveControled implements MovementStrategy {
     @Override
     public void move(Entity entity) {
         entity.moving = true;
+        entity.setCollisionOn(false);
         if (keyH.downPressed) {
-            entity.mapY += entity.getSpeed();
             entity.setMovementDirection(MovementDirection.DOWN);
+            if (!entity.getCollisionChecker().checkTile(entity)){
+                entity.mapY += entity.getSpeed();
+            }
         } else if (keyH.leftPressed) {
-            entity.mapX -= entity.getSpeed();
             entity.setMovementDirection(MovementDirection.LEFT);
-        } else if (keyH.rightPressed) {
-            entity.mapX += entity.getSpeed();   
+            if (!entity.getCollisionChecker().checkTile(entity)){
+                entity.mapX -= entity.getSpeed();
+            }
+        } else if (keyH.rightPressed) {  
             entity.setMovementDirection(MovementDirection.RIGHT);
+            if (!entity.getCollisionChecker().checkTile(entity)){
+                entity.mapX += entity.getSpeed();
+            }
         } else if (keyH.upPressed) {
-            entity.mapY -= entity.getSpeed();
             entity.setMovementDirection(MovementDirection.UP);
+            if (!entity.getCollisionChecker().checkTile(entity)){
+                entity.mapY -= entity.getSpeed();
+            }
         } else {
             entity.moving = false;
         }

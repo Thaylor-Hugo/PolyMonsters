@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import itens.Item;
 import itens.ItemTypes;
 import main.GamePanel;
 import main.KeyHandler;
+import tile.CollisionChecker;
+
 
 public abstract class Entity {
     public int mapX;    // position related to the world map
@@ -35,6 +38,9 @@ public abstract class Entity {
     protected int hp;              // valor de hp que entidade possui no momento
     protected int damage;
     protected Map<ItemTypes, ArrayList<Item>> inventory;
+    protected Rectangle collisionArea = new Rectangle(8,16,32,32);
+    protected boolean collisionOn = false;
+    protected CollisionChecker collisionChecker = new CollisionChecker(this);
 
     /**
      * Set instance variables to defalt values
@@ -101,7 +107,7 @@ public abstract class Entity {
     public void setMovementDirection(MovementDirection mvDirect) {
         this.mvDirect = mvDirect;
     }
-
+    
     /**
      * Set the movement strategy for the entity
      * @param mvType a movement strategy to use
@@ -112,20 +118,20 @@ public abstract class Entity {
     public void setMovementStrategy(MovementTypes mvType, int movementConst, KeyHandler keyH) {
         switch (mvType) {
             case UP_DOWN:
-                mvStrategy = new MoveUpDown(movementConst);
-                break;
+            mvStrategy = new MoveUpDown(movementConst);
+            break;
             case SQUARE:
-                mvStrategy = new MoveSquare(movementConst);
-                break;
+            mvStrategy = new MoveSquare(movementConst);
+            break;
             case RANDOM:
-                mvStrategy = new MoveRandom(movementConst);
-                break;
+            mvStrategy = new MoveRandom(movementConst);
+            break;
             case CONTROLED:
-                mvStrategy = new MoveControled(keyH);
-                break;
+            mvStrategy = new MoveControled(keyH);
+            break;
             default:
-                mvStrategy = new MoveSquare(movementConst);
-                break;
+            mvStrategy = new MoveSquare(movementConst);
+            break;
         }
     }
 
@@ -146,5 +152,34 @@ public abstract class Entity {
     }
     public void setHp(int newHp) {
         hp = newHp;
+    }
+    /**
+     * Get the entity's effective Collision Area
+     * @return entity's {@code Rectangle} that represents Area
+     */
+    public Rectangle getCollisionArea() {
+        return collisionArea;
+    }
+    
+    /**
+     * Get the currect status of active or innactive Collision in an Entity
+     * @return entity's {@code boolean} that indicates if collision is on or off
+     */
+    public boolean getCollisionOn() {
+        return collisionOn;
+    }
+    
+    /**
+     */
+    public void setCollisionOn(boolean collisionOn) {
+        this.collisionOn = collisionOn;
+    }
+
+    public CollisionChecker getCollisionChecker(){
+        return collisionChecker;
+    }
+
+    public GamePanel getGamePanel (){
+        return gp;
     }
 }
