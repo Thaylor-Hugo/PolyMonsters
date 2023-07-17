@@ -352,7 +352,7 @@ public class Battle {
                 monsters.remove(battleMonster);
                 inBattle = false;
             }
-        }
+        } else sound.stop(); 
     }
 
     /**

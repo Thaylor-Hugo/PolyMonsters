@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 import actions.Battle;
+import actions.Sound;
 import entity.Player;
 import entity.monsters.Ghost;
 import entity.monsters.Goblin;
@@ -70,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     MenuOptions gameState = MenuOptions.INICIAL;
 
+    private Sound sound = new Sound(getClass().getResource("/music/atmosphere.wav"));
+
     public void setGameState(MenuOptions opcao) {
         gameState = opcao;
         if(opcao == MenuOptions.INICIAL){
@@ -102,6 +105,7 @@ public class GamePanel extends JPanel implements Runnable {
     ArrayList<Npc> npcs = new ArrayList<>();
 
     public GamePanel() {
+        sound.setVolume(-20);
 
         dificuldade = new EasyState();
 
@@ -185,6 +189,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        if (!battle.inBattle) {
+            if (!sound.isRunning()) sound.play();
+        } else if (sound.isRunning()) sound.stop();
         // Update the information on screen, as such player position
         if (gameState != MenuOptions.JOGANDO) {
             menu[currentMenu].tick();
