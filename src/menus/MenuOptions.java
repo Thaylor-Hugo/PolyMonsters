@@ -1,0 +1,5 @@
+package menus;
+
+public enum MenuOptions {
+    INICIAL, ESCOLHERJOGADOR, PAUSE, ESCOLHERDIFICULDADE, ESCOLHERAMBIENTE, JOGANDO;
+}

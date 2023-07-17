@@ -4,11 +4,39 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
+import actions.Battle;
+import actions.Sound;
 import entity.Player;
+import entity.monsters.Ghost;
+import entity.monsters.Goblin;
+import entity.monsters.Golem;
+import entity.monsters.Monsters;
+import entity.monsters.Rat;
+import entity.monsters.Sereia;
+import entity.monsters.Zombie;
+import menus.Menu;
+import menus.MenuAmbiente;
+import menus.MenuDificuldade;
+import menus.MenuInicial;
+import menus.MenuOptions;
+import menus.MenuPause;
+import menus.MenuPersonagens;
+import state.DifficultyState;
+import state.EasyState;
+
+import entity.npcs.Npc;
+import entity.objects.Backpack;
 import tile.TileManager;
+import entity.objects.Object;
+import itens.Item;
+import itens.ItemTypes;
 
 public class GamePanel extends JPanel implements Runnable {
     
@@ -30,33 +58,99 @@ public class GamePanel extends JPanel implements Runnable {
     public final int mapWidth = tileSize*maxMapCol;
     public final int mapHeight = tileSize*maxMapRow;
 
+    KeyHandler keyH = new KeyHandler();
+    Player player = new Player(this, keyH);
+    int currentMenu = 0;
+    boolean terror = false;
+    private final Menu menu[] = {new MenuInicial(this, keyH), new MenuPersonagens(this, keyH, player), 
+    new MenuDificuldade(this, keyH), new MenuAmbiente(this, keyH), new MenuPause(this, keyH)};
+
     int FPS = 60;
 
-    int gameState = MENU;
+    public boolean showInventory = false;
 
-    public void setGameState() {
-        if (gameState == MENU) {
-            gameState = PLAYING;
-        } else {
-            gameState = MENU;
-        };
+    MenuOptions gameState = MenuOptions.INICIAL;
+
+    private Sound sound = new Sound(getClass().getResource("/music/atmosphere.wav"));
+
+    public void setGameState(MenuOptions opcao) {
+        gameState = opcao;
+        if(opcao == MenuOptions.INICIAL){
+            currentMenu = 0;
+        }else if(opcao == MenuOptions.ESCOLHERJOGADOR){
+            currentMenu = 1; 
+        }else if(opcao == MenuOptions.ESCOLHERDIFICULDADE){
+            currentMenu = 2;
+        }else if (opcao == MenuOptions.ESCOLHERAMBIENTE){
+            currentMenu = 3;
+        }else if(opcao == MenuOptions.PAUSE){
+            currentMenu = 4;
+        }
     }
     TileManager tileM = new TileManager(this);
 
-    KeyHandler keyH = new KeyHandler();
-
-    Menu menu = new Menu(this, keyH);
-
     Thread gameThread;
     
-    Player player = new Player(this, keyH);
+    ArrayList<Monsters> monsters = new ArrayList<>();
+    ArrayList<Object> objects = new ArrayList<>();
+    ArrayList<Item> cereal = new ArrayList<>();
+    ArrayList<Item> ginger = new ArrayList<>();
+    ArrayList<Item> fruit = new ArrayList<>();
+    Map<ItemTypes, ArrayList<Item>> backpackContent = new HashMap<>();
+    Battle battle = new Battle(monsters, player, this, keyH);
+
+    private DifficultyState dificuldade;
+    //private Dificuldades dificuldade;
+
+    ArrayList<Npc> npcs = new ArrayList<>();
 
     public GamePanel() {
+        sound.setVolume(-20);
+
+        dificuldade = new EasyState();
+
+        for (int i = 0; i < 10; i++) {
+            cereal.add(new Item(ItemTypes.CEREAL_BAR));
+            ginger.add(new Item(ItemTypes.FRUIT));
+            fruit.add(new Item(ItemTypes.GINGERBREAD));
+        }
+        backpackContent.put(ItemTypes.CEREAL_BAR, cereal);
+        backpackContent.put(ItemTypes.FRUIT, fruit);
+        backpackContent.put(ItemTypes.GINGERBREAD, ginger);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.LIGHT_GRAY);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        for (int i = 0; i < 60; i++) {
+            // Cria 10 monstros de cada tipo, espalhados aleatoriamente
+            Random rand = new Random();
+            if (i < 10) {
+                monsters.add(new Ghost(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
+            } else if (i < 20) {
+                monsters.add(new Goblin(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
+            } else if (i < 30) {
+                monsters.add(new Golem(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
+            } else if (i < 40) {
+                monsters.add(new Rat(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
+            } else if(i < 50) {
+                monsters.add(new Sereia(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize)));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
+            } else if (i < 60) {
+                monsters.add(new Zombie(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player));
+                objects.add(new Backpack(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH, backpackContent));
+                npcs.add(new Npc(this, rand.nextInt(mapWidth - tileSize), rand.nextInt(mapHeight - tileSize), player, keyH));
+            }
+        }
     }
 
     public void startGameThread() {
@@ -83,6 +177,10 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 // What actually happens in the loop in each FPS update 
+                if (keyH.inventoryPressed) {
+                    showInventory = !showInventory;
+                    keyH.inventoryPressed = false;
+                }
                 update();
                 repaint();
                 delta--;
@@ -91,14 +189,23 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        if (!battle.inBattle) {
+            if (!sound.isRunning()) sound.play();
+        } else if (sound.isRunning()) sound.stop();
         // Update the information on screen, as such player position
-        if (gameState == MENU) {
-            menu.tick();
+        if (gameState != MenuOptions.JOGANDO) {
+            menu[currentMenu].tick();
         } else {
             if (keyH.pausePressed) {
-                gameState = MENU;
+                setGameState(MenuOptions.PAUSE);
             } else {
-                player.update();        
+                battle.update();
+                if (!battle.inBattle) {
+                    player.update();        
+                    for (Monsters monster : monsters) monster.update();
+                    for (Object object : objects) object.update();
+                    for (Npc npc : npcs) npc.update();
+                }
             }
         }
     }
@@ -109,11 +216,17 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
         
-        if (gameState == MENU) {
-            menu.render(g);
+        if (gameState != MenuOptions.JOGANDO) {
+            menu[currentMenu].render(g);
         } else {
-            tileM.draw(g2); //needs to be called first to no overlay Player
-            player.draw(g2);
+            if (battle.inBattle) battle.draw(g2);
+            else {
+                tileM.draw(g2); //needs to be called first to no overlay Player
+                for (Monsters monster : monsters) monster.draw(g2);
+                for (Object object : objects) object.draw(g2);
+                for (Npc npc : npcs) npc.draw(g2);
+                player.draw(g2);
+            }
         }
 
         g2.dispose();
@@ -122,4 +235,21 @@ public class GamePanel extends JPanel implements Runnable {
     public Player getPlayer() {
         return player;
     }
+    
+    public TileManager getTileM() {
+        return tileM;
+    }
+    
+    public void setDifficultyState(DifficultyState state) {
+        player.setDifficultyState(state);
+    }
+    
+    public void playGame() {
+        dificuldade.play();
+    }
+    
+    public void setAmbiente(boolean b) {
+        terror = b;
+    }
+
 }

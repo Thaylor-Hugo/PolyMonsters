@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+/** Main class */
 public class PolyMonsters {
     public static void main(String[] args) {
         JFrame gameWindow = new JFrame();

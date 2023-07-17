@@ -25,15 +25,18 @@ Nosso time é composto por 4 integrantes (gitlab user; Nusp):
 
 ## 📌 Project status
 
-### 🌎 Fase 2 do projeto:
+### 🌎 Fase atual do projeto:
 ### ✅ Objetivos alcançados:
-* Gameloop
-* Menu inicial e sistema de Pause
-* Jogador pode se movimentar (com WASD ou Setinhas) e correr pelo mapa (com SHIFT)
-* Mapa de mundo implementado
+* Menu de escolha de personagem e dificuldade, podem ser alterados a qualquer momento
 * Movimentação de camera, seguindo o jogador
+* Diferentes monstros e efeitos sonoros
+* Uso de itens
+* Interação com npcs e objetos
+* Padrões de programação:
+    * Estratégia para diferentes movimentações
+    * Estado para dificuldades
+
 ### 🔲 Próximos objetivos:
-* Aprimorar funções já implementadas
-* Aprimorar visualmente os Sprites
-* Adicionar monstros e itens pelo mapa
-* Adicionar interação do personagem com o mundo (terreno, objetos, NPC's)
+* Ambientes internos
+* Colisão
+* Posicionamento das entidades pelo mapa

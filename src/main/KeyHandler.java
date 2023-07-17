@@ -3,10 +3,13 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * A {@code KeyHandler} for keyboard inputs
+ */
 public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed, sprintPressed;
-    public boolean interrectPressed, pausePressed;
+    public boolean interrectPressed, inventoryPressed, pausePressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -31,11 +34,14 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_SHIFT) {
             sprintPressed = true;
         }
-        if (code == KeyEvent.VK_ENTER) {
+        if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_E) {
             interrectPressed = true;
         }
         if (code == KeyEvent.VK_ESCAPE) {
             pausePressed = true;
+        }
+        if (code == KeyEvent.VK_Q) {
+            inventoryPressed = true;
         }
     }
     
@@ -57,11 +63,14 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_SHIFT) {
             sprintPressed = false;
         }
-        if (code == KeyEvent.VK_ENTER) {
+        if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_E) {
             interrectPressed = false;
         }
         if (code == KeyEvent.VK_ESCAPE) {
             pausePressed = false;
+        }
+        if (code == KeyEvent.VK_Q) {
+            inventoryPressed = false;
         }
     }
     
