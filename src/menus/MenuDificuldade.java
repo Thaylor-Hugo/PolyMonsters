@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import entity.Player;
+
 import java.awt.Color;
 import java.awt.Font;
 import main.GamePanel;

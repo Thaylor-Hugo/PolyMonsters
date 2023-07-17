@@ -8,6 +8,8 @@ import actions.movements.enums.MovementDirection;
 import actions.movements.enums.MovementTypes;
 import main.GamePanel;
 import main.KeyHandler;
+import state.DifficultyState;
+import state.EasyState;
 
 public class Player extends Entity {
 
@@ -28,10 +30,14 @@ public class Player extends Entity {
 
     private boolean player2 = false;
 
-
+    private DifficultyState dificuldade;
+    
+    
     //player position related to the screen
     public final int screenX;
     public final int screenY;
+
+   
 
     KeyHandler keyH;
     public boolean sprinting;
@@ -49,6 +55,8 @@ public class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+
+        dificuldade = new EasyState();
 
         //player's position fixed in the center of screen
         screenX = gp.screenWidth/2 - gp.tileSize/2;
@@ -76,9 +84,41 @@ public class Player extends Entity {
         setMovementStrategy(MovementTypes.CONTROLED, 0, keyH);
     }
 
+    public void setDifficultyState(DifficultyState state) {
+        this.dificuldade = state;
+    }
+    
+    public int getHp(){
+        return dificuldade.getHp();
+    }
+
+    public void setHp(int hp) {
+        dificuldade.setHp(hp);
+    }
+
+    public int getDamage(){
+        return dificuldade.getDamage();
+    }
+
+    public void setDamage(int damage) {
+        dificuldade.setDamage(damage);
+    }
+
+    public int getSpeed(){
+        return dificuldade.getSpeed();
+    }
+
+    public void setSpeed(int speed) {
+        dificuldade.setSpeed(speed);
+    }
+
+    public void playGame() {
+        dificuldade.play();
+    }
+
     @Override
     public int getRefHp() {
-        return 100;
+        return dificuldade.getRefHp();
     }
     
     @Override

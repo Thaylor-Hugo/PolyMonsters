@@ -193,17 +193,15 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManager getTileM() {
         return tileM;
     }
+    
     public void setDifficultyState(DifficultyState state) {
-        dificuldade = state;
+        player.setDifficultyState(state);
     }
     
     public void playGame() {
         dificuldade.play();
     }
-    /*public void setDificult(Dificuldades dificuldade) {
-        this.dificuldade = dificuldade;
-     }*/
-
+    
     public void setAmbiente(boolean b) {
         terror = b;
     }

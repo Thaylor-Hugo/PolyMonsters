@@ -110,7 +110,7 @@ public class Battle {
         // Cenario
         g2.drawImage(player.battleImage, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize/2, gp.tileSize * 3, gp.tileSize * 3, null);
         g2.drawImage(battleMonster.battleImage, gp.tileSize * 10, gp.tileSize * 2, gp.tileSize * 3, gp.tileSize * 3, null);
-        drawLifeBar(g2, player.hp, player.getRefHp(), gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize);
+        drawLifeBar(g2, player.getHp(), player.getRefHp(), gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize);
         drawLifeBar(g2, battleMonster.hp, battleMonster.getRefHp(), gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2);
                 
         drawDamage(g2, gp.tileSize * 3, gp.tileSize * 4 - gp.tileSize - 7, gp.tileSize * 10, gp.tileSize * 2 - gp.tileSize/2 - 7);
@@ -250,20 +250,20 @@ public class Battle {
                 if(keyH.interrectPressed) {
                     Random rand = new Random();
                     if (chargedPosition <= chargedGoal + chargedRange && chargedPosition >= chargedGoal - chargedRange) {
-                        damageDealt = player.damage * (rand.nextDouble() * 2 + 1); // between 1 and 3
+                        damageDealt = player.getDamage() * (rand.nextDouble() * 2 + 1); // between 1 and 3
                         battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
                     } else if (chargedPosition <= chargedGoal + 2*chargedRange && chargedPosition >= chargedGoal - 2*chargedRange) {
-                        damageDealt = player.damage * rand.nextDouble();
+                        damageDealt = player.getDamage() * rand.nextDouble();
                         battleMonster.hp -= damageDealt;
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
                     } else {
-                        battleMonster.hp -= player.damage;
-                        damageDealt = player.damage;
+                        battleMonster.hp -= player.getDamage();
+                        damageDealt = player.getDamage();
                         wasDamageDealt = true;
                         playerTurn = false;
                         chargedAtack = false;
@@ -276,15 +276,15 @@ public class Battle {
                     if(keyH.interrectPressed) playerAction();    
                 }
                 else {
-                    player.hp -= battleMonster.damage;
+                    player.setHp(player.getHp() - battleMonster.damage);
                     playerTurn = true;
                     wasDamageTaken = true;
                     damageTaken = battleMonster.damage;
                 }
             }
-            if (player.hp <= 0) {
+            if (player.getHp() <= 0) {
                 player.setOnLastSafePosition();
-                player.hp = player.getRefHp();
+                player.setHp(player.getRefHp());
                 battleMonster.hp = battleMonster.getRefHp();
                 inBattle = false;
             }
@@ -298,8 +298,8 @@ public class Battle {
     private void playerAction() {
         if (currentOption == 0) {
             // Normal atack
-            battleMonster.hp -= player.damage;
-            damageDealt = player.damage;
+            battleMonster.hp -= player.getDamage();
+            damageDealt = player.getDamage();
             wasDamageDealt = true;
             playerTurn = false;
         }
@@ -322,11 +322,12 @@ public class Battle {
                 player.setOnLastSafePosition();
                 inBattle = false;
             } else if (player.speed == battleMonster.speed) {
-                player.hp -= battleMonster.damage;
+                player.setHp(player.getHp() - battleMonster.damage);
+                
                 damageTaken = battleMonster.damage;
                 wasDamageTaken = true;
             } else {
-                player.hp -= battleMonster.damage * 2;  // Bonus atack cause failed to run
+                player.setHp(player.getHp() - battleMonster.damage * 2); // Bonus atack cause failed to run
                 damageTaken = battleMonster.damage * 2;
                 wasDamageTaken = true;
             }
