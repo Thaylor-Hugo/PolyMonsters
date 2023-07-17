@@ -275,7 +275,7 @@ public class Player extends Entity {
                 if (inventiryOptions[inventoryOption] == ItemTypes.CEREAL_BAR && !buff.speedBuffOn) {
                     inventory.get(inventiryOptions[inventoryOption]).remove(0).use(this);
                 } else 
-                if (inventiryOptions[inventoryOption] == ItemTypes.FRUIT && hp != getRefHp()) {
+                if (inventiryOptions[inventoryOption] == ItemTypes.FRUIT && getHp() != getRefHp()) {
                     inventory.get(inventiryOptions[inventoryOption]).remove(0).use(this);
                 }
                 
@@ -366,7 +366,7 @@ public class Player extends Entity {
      * Cure the player
      */
     public void activateHpCure() {
-        hp = getRefHp();
+        setHp(getRefHp());
         buff.activateHpCure();
     }
 }
