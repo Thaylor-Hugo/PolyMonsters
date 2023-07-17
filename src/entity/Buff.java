@@ -9,16 +9,16 @@ import javax.swing.ImageIcon;
  * A entity {@code Buff} that controls the speed and damage buffs and animations 
  */
 public class Buff {
-    int baseSpeed, baseDamage;
-    int speedBuffTime = 60 * 60; // 1 minute
-    int hpCureAnimation = 60 * 1; // 5 seconds
-    int damageBuffrounds = 5;
-    final int damageBuff = 0;
-    final int speedBuff = 1;
-    final int hpCureBuff = 2;
-    int currentBuffTime[] = {0, 0, 0};
-    boolean damageBuffOn, speedBuffOn, hpCureBuffOn;
-    Image damageImage, speedImage, hpCureImage;
+    protected int baseSpeed, baseDamage;
+    protected int speedBuffTime = 60 * 60; // 1 minute
+    protected int hpCureAnimation = 60 * 1; // 5 seconds
+    protected int damageBuffrounds = 5;
+    protected final int damageBuff = 0;
+    protected final int speedBuff = 1;
+    protected final int hpCureBuff = 2;
+    protected int currentBuffTime[] = {0, 0, 0};
+    protected boolean damageBuffOn, speedBuffOn, hpCureBuffOn;
+    protected Image damageImage, speedImage, hpCureImage;
     
     public Buff(int baseSpeed, int baseDamage) {
         this.baseDamage = baseDamage;
@@ -105,4 +105,13 @@ public class Buff {
     public void activateHpCure() {
         hpCureBuffOn = true;
     }
+
+    public void setBaseDamage(int newBaseDamage) {
+        baseDamage = newBaseDamage;
+    }
+
+    public void setBaseSpeed(int newBaseSpeed) {
+        baseSpeed = newBaseSpeed;
+    }
+    
 }

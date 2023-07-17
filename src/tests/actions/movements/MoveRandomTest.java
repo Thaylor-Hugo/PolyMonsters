@@ -37,7 +37,7 @@ public class MoveRandomTest {
         MovementDirection initialDirection = MovementDirection.DOWN;
         int initialX = rand.nextInt(10000);
         int initialY = rand.nextInt(10000);
-        int error = entity.speed;
+        int error = entity.getSpeed();
         entity.mapX = initialX;
         entity.mapY = initialY;
         entity.setMovementDirection(initialDirection);
@@ -50,19 +50,19 @@ public class MoveRandomTest {
             switch (entity.getMovementDirection()) {
                 case DOWN:
                     assertTrue(entity.mapX <= lastX + error && entity.mapX >= lastX - error);
-                    assertEquals(entity.mapY, lastY + entity.speed);
+                    assertEquals(entity.mapY, lastY + entity.getSpeed());
                     break;
                 case LEFT:
                     assertTrue(entity.mapY <= lastY + error && entity.mapY >= lastY - error);
-                    assertEquals(entity.mapX, lastX - entity.speed);
+                    assertEquals(entity.mapX, lastX - entity.getSpeed());
                     break;
                 case UP:
                     assertTrue(entity.mapX <= lastX + error && entity.mapX >= lastX - error);
-                    assertEquals(entity.mapY, lastY - entity.speed);
+                    assertEquals(entity.mapY, lastY - entity.getSpeed());
                     break;
                 case RIGHT:
                     assertTrue(entity.mapY <= lastY + error && entity.mapY >= lastY - error);
-                    assertEquals(entity.mapX, lastX + entity.speed);
+                    assertEquals(entity.mapX, lastX + entity.getSpeed());
                     break;
             }
         }
@@ -84,7 +84,7 @@ public class MoveRandomTest {
         // 10000 bound to avoid overflow
         int initialX = rand.nextInt(10000);
         int initialY = rand.nextInt(10000);
-        int error = entity.speed;
+        int error = entity.getSpeed();
         entity.mapX = initialX;
         entity.mapY = initialY;
         MovementDirection initialDirection = MovementDirection.DOWN;

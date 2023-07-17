@@ -25,15 +25,15 @@ import main.KeyHandler;
 public abstract class Entity {
     public int mapX;    // position related to the world map
     public int mapY;
-    public int speed;
+    protected int speed;
     public boolean moving;
     protected MovementDirection mvDirect;
     protected MovementStrategy mvStrategy;
     public Image entityImage;
     public Image battleImage;
     protected GamePanel gp;
-    public int hp;              // valor de hp que entidade possui no momento
-    public int damage;
+    protected int hp;              // valor de hp que entidade possui no momento
+    protected int damage;
     protected Map<ItemTypes, ArrayList<Item>> inventory;
 
     /**
@@ -127,5 +127,24 @@ public abstract class Entity {
                 mvStrategy = new MoveSquare(movementConst);
                 break;
         }
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+    public int getDamage() {
+        return damage;
+    }
+    public int getHp() {
+        return hp;
+    }
+    public void setSpeed(int newSpeed) {
+        speed = newSpeed;
+    }
+    public void setDamage(int newDamage) {
+        damage = newDamage;
+    }
+    public void setHp(int newHp) {
+        hp = newHp;
     }
 }

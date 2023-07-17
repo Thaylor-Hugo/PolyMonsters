@@ -24,9 +24,9 @@ public class MoveUpDown implements MovementStrategy {
     @Override
     public void move(Entity entity) {
         entity.moving = true;
-        if (entity.getMovementDirection() == MovementDirection.DOWN)       entity.mapY += entity.speed;
-        else if (entity.getMovementDirection() == MovementDirection.UP)    entity.mapY -= entity.speed;
-        totalMoved += entity.speed;
+        if (entity.getMovementDirection() == MovementDirection.DOWN)       entity.mapY += entity.getSpeed();
+        else if (entity.getMovementDirection() == MovementDirection.UP)    entity.mapY -= entity.getSpeed();
+        totalMoved += entity.getSpeed();
 
         if (totalMoved >= totalToMove) {
             totalMoved = 0;

@@ -4,10 +4,8 @@ import entity.Player;
 import main.GamePanel;
 import main.KeyHandler;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.api.DisplayName;
@@ -47,30 +45,30 @@ public class PlayerTest {
         player.update();
         if (keyH.upPressed) {
             if (sprint) {
-                assertTrue(player.mapY < previusY - player.speed);
+                assertTrue(player.mapY < previusY - player.getSpeed());
             } else {
-                assertTrue(player.mapY == previusY - player.speed);
+                assertTrue(player.mapY == previusY - player.getSpeed());
             }
         }
         if (keyH.leftPressed) {
             if (sprint) {
-                assertTrue(player.mapX < previusX - player.speed);
+                assertTrue(player.mapX < previusX - player.getSpeed());
             } else {
-                assertTrue(player.mapX == previusX - player.speed);
+                assertTrue(player.mapX == previusX - player.getSpeed());
             }
         }
         if (keyH.downPressed) {
             if (sprint) {
-                assertTrue(player.mapY > previusY + player.speed);
+                assertTrue(player.mapY > previusY + player.getSpeed());
             } else {
-                assertTrue(player.mapY == previusY + player.speed);
+                assertTrue(player.mapY == previusY + player.getSpeed());
             }
         }
         if (keyH.rightPressed) {
             if (sprint) {
-                assertTrue(player.mapX > previusX + player.speed);
+                assertTrue(player.mapX > previusX + player.getSpeed());
             } else {
-                assertTrue(player.mapX == previusX + player.speed);
+                assertTrue(player.mapX == previusX + player.getSpeed());
             }
         }
     }

@@ -16,6 +16,8 @@ import itens.Item;
 import itens.ItemTypes;
 import main.GamePanel;
 import main.KeyHandler;
+import state.DifficultyState;
+import state.EasyState;
 
 /**
  * Game {@code Player}
@@ -39,7 +41,8 @@ public class Player extends Entity {
 
     private boolean alternativePlayer = false;
 
-
+    private DifficultyState dificuldade;
+    
     //player position related to the screen
     public final int screenX;
     public final int screenY;
@@ -67,6 +70,8 @@ public class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+
+        dificuldade = new EasyState();
 
         //player's position fixed in the center of screen
         screenX = gp.screenWidth/2 - gp.tileSize/2;
@@ -111,9 +116,41 @@ public class Player extends Entity {
         }
     }
 
+    public void setDifficultyState(DifficultyState state) {
+        this.dificuldade = state;
+        buff.setBaseDamage(dificuldade.getDamage());
+        buff.setBaseSpeed(dificuldade.getSpeed());
+    }
+    
+    public int getHp(){
+        return dificuldade.getHp();
+    }
+
+    public void setHp(int hp) {
+        dificuldade.setHp(hp);
+    }
+
+    public void setDamage(int damage) {
+        dificuldade.setDamage(damage);
+        buff.setBaseDamage(damage);
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        dificuldade.setSpeed(speed);
+        buff.setBaseSpeed(speed);
+    }
+
+    public void playGame() {
+        dificuldade.play();
+    }
+
     @Override
     public int getRefHp() {
-        return 100;
+        return dificuldade.getRefHp();
     }
     
     @Override

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,6 @@ import entity.monsters.Monsters;
 import entity.monsters.Rat;
 import entity.monsters.Sereia;
 import entity.monsters.Zombie;
-import menus.Dificuldades;
 import menus.Menu;
 import menus.MenuAmbiente;
 import menus.MenuDificuldade;
@@ -29,6 +27,8 @@ import menus.MenuInicial;
 import menus.MenuOptions;
 import menus.MenuPause;
 import menus.MenuPersonagens;
+import state.DifficultyState;
+import state.EasyState;
 
 import entity.npcs.Npc;
 import entity.objects.Backpack;
@@ -96,11 +96,15 @@ public class GamePanel extends JPanel implements Runnable {
     Map<ItemTypes, ArrayList<Item>> backpackContent = new HashMap<>();
     Battle battle = new Battle(monsters, player, this, keyH);
 
-    private Dificuldades dificuldade;
+    private DifficultyState dificuldade;
+    //private Dificuldades dificuldade;
 
     ArrayList<Npc> npcs = new ArrayList<>();
 
     public GamePanel() {
+
+        dificuldade = new EasyState();
+
         for (int i = 0; i < 10; i++) {
             cereal.add(new Item(ItemTypes.CEREAL_BAR));
             ginger.add(new Item(ItemTypes.FRUIT));
@@ -228,11 +232,15 @@ public class GamePanel extends JPanel implements Runnable {
     public TileManager getTileM() {
         return tileM;
     }
-
-    public void setDificult(Dificuldades dificuldade) {
-        this.dificuldade = dificuldade;
+    
+    public void setDifficultyState(DifficultyState state) {
+        player.setDifficultyState(state);
     }
-
+    
+    public void playGame() {
+        dificuldade.play();
+    }
+    
     public void setAmbiente(boolean b) {
         terror = b;
     }
